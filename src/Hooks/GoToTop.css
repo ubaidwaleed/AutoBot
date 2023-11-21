@@ -1,0 +1,28 @@
+.Gototop-aboutcss {
+  z-index: 999;
+}
+.Gototop-aboutcss button {
+  position: fixed;
+  width: 2rem;
+  height: 2rem;
+  background-color: #1a79ff;
+  color: #fff;
+  border-radius: 50%;
+  bottom: 1rem;
+  right: 4rem;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.Gototop-aboutcss button .icon {
+  animation: gototop 1.2s linear infinite alternate-reverse;
+}
+@keyframes gototop {
+  0% {
+    transform: translateY(-2px);
+  }
+  100% {
+    transform: translateY(2px);
+  }
+}

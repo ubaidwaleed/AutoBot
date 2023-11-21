@@ -1,0 +1,129 @@
+import Info from "../components/single-product/Info";
+import Product from "../components/single-product/Product";
+import Cart from "../components/single-product/Cart";
+import Lightbox from "../components/single-product/Lightbox";
+import Footer from "../components/market-place/footer";
+import Sidebar from "../components/Sidebar";
+import { useState, useEffect } from "react";
+
+function SingleProduct() {
+  function FeatureCard({ iconSrc, title, description }) {
+    return (
+      <div className="flex items-center justify-center gap-3 px-3 py-6 rounded-sm border-primary">
+        <img src={iconSrc} alt={title} className="object-contain w-12 h-12" />
+        <div>
+          <h4 className="text-lg font-medium capitalize">{title}</h4>
+          <p className="text-sm text-gray-500">{description}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const [showLightbox, setShowLightbox] = useState(false);
+  const [quantity, setQuantity] = useState(0);
+  const [count, setCount] = useState(0);
+  const [orders, setOrders] = useState([]);
+  const [showImg, setShowImg] = useState(
+    "https://red-parts.react.themeforest.scompiler.ru/themes/blue/images/products/product-8-1.jpg"
+  );
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // Set initial width for mobile detection
+
+  const images = [
+    {
+      img: "https://red-parts.react.themeforest.scompiler.ru/themes/blue/images/products/product-8-1.jpg",
+    },
+    {
+      img: "https://red-parts.react.themeforest.scompiler.ru/themes/blue/images/products/product-2-1.jpg",
+    },
+    {
+      img: "https://red-parts.react.themeforest.scompiler.ru/themes/blue/images/products/product-8-1.jpg",
+    },
+    {
+      img: "https://red-parts.react.themeforest.scompiler.ru/themes/blue/images/products/product-2-1.jpg",
+    },
+  ];
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return (
+    <>
+      <Sidebar />
+
+      <div className="relative ml-16">
+        {!isMobile && showLightbox && (
+          <Lightbox
+            showImg={showImg}
+            setShowImg={setShowImg}
+            showLightbox={showLightbox}
+            setShowLightbox={setShowLightbox}
+            image={images}
+          />
+        )}
+
+        <div className="center-content">
+          <div className="flex items-center justify-center fit-content md:h-[800px]">
+            <div className="md:grid md:grid-cols-2">
+              <Product
+                setShowLightbox={setShowLightbox}
+                showLightbox={showLightbox}
+                showImg={showImg}
+                setShowImg={setShowImg}
+                image={images}
+              />
+              <Info
+                Cart={Cart}
+                quantity={quantity}
+                setQuantity={setQuantity}
+                setOrders={setOrders}
+                setCount={setCount}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="relative ml-16">
+        <div className="relative flex justify-center w-full">
+          <div className="container py-8 ">
+            <div className="grid w-full grid-cols-1 gap-6 mx-auto md:grid-cols-4">
+              <FeatureCard
+                iconSrc="src/assets/images/icons/delivery-van.svg"
+                title="Free Shipping"
+                description="Order over $200"
+              />
+              <FeatureCard
+                iconSrc="src/assets/images/icons/money-back.svg"
+                title="Money Returns"
+                description="30 days money returns"
+              />
+              <FeatureCard
+                iconSrc="src/assets/images/icons/phone.svg"
+                title="24/7 Support"
+                description="Customer support"
+              />
+              <FeatureCard
+                iconSrc="src/assets/images/icons/sale.svg"
+                title="Hot Offers"
+                description="Discount upto 80%"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="relative ml-16">
+        <Footer />
+      </div>
+    </>
+  );
+}
+
+export default SingleProduct;

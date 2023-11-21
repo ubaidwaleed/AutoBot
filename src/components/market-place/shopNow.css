@@ -1,0 +1,24 @@
+.meet-bg {
+  background-image: url("https://cdn4.vectorstock.com/i/1000x1000/62/58/cars-blue-tire-tracks-background-vector-21496258.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.banner-btn {
+  position: relative;
+}
+.banner-btn::before {
+  position: absolute;
+  content: "";
+  right: 0px;
+  top: 0;
+  height: 100%;
+  width: 12px;
+  background-color: #1a79ff;
+  transform: translateX(20px);
+  transition: 0.5s;
+}
+.banner-btn:hover::before {
+  transform: translateX(0px);
+}

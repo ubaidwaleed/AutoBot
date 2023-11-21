@@ -1,0 +1,36 @@
+.card-full {
+  position: relative;
+  transition: 0.5s;
+}
+.card-full::before {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: #1775faab;
+  opacity: 0;
+  transition: 0.5s;
+}
+.card-full:hover::before {
+  opacity: 1;
+}
+.card-full .down-text {
+  transition: 0.5s;
+}
+.card-full:hover .down-text {
+  opacity: 0;
+}
+.hover-text {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: 0.5s;
+}
+.card-full:hover .hover-text {
+  opacity: 1;
+  top: 50%;
+}
