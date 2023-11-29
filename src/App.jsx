@@ -12,6 +12,7 @@ import Home from "./pages/home";
 import AutoBot from "./pages/autoBot";
 import Marketplace from "./pages/marketplace";
 import SingleProduct from "./pages/single-product";
+import Cart from "./pages/cart";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
       <Route path="/autobot" element={<AutoBot />} />
       <Route path="/shop" element={<Shop />} />
       <Route path="/single-product" element={<SingleProduct />} />
+      <Route path="/cart" element={<Cart />} />
     </Routes>
   );
 }
