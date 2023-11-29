@@ -13,6 +13,7 @@ import AutoBot from "./pages/autoBot";
 import Marketplace from "./pages/marketplace";
 import SingleProduct from "./pages/single-product";
 import Cart from "./pages/cart";
+import Checkout from "./pages/checkout";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
       <Route path="/shop" element={<Shop />} />
       <Route path="/single-product" element={<SingleProduct />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/checkout" element={<Checkout />} />
     </Routes>
   );
 }
