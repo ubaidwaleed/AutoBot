@@ -5,6 +5,7 @@ import Lightbox from "../components/single-product/Lightbox";
 import Footer from "../components/market-place/footer";
 import Sidebar from "../components/Sidebar";
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 function SingleProduct() {
   function FeatureCard({ iconSrc, title, description }) {
@@ -19,29 +20,36 @@ function SingleProduct() {
     );
   }
 
+  //getting the data of this accessory from parent
+  const [receivedAccessoryData, setReceivedAccessoryData] = useState(null);
+
+  const [images, setImages] = useState([]);
+  const [showImg, setShowImg] = useState();
+
+  const location = useLocation();
+  useEffect(() => {
+    if (location.state && location.state.accessoryData) {
+      const receivedData = location.state.accessoryData;
+      setReceivedAccessoryData(receivedData);
+
+      // Update the images state with the received images
+      if (receivedData.images && receivedData.images.length > 0) {
+        const updatedImages = receivedData.images.map((imageUrl) => ({
+          img: imageUrl,
+        }));
+        const showImg = receivedData.images[0];
+        setImages(updatedImages);
+        setShowImg(showImg);
+      }
+    }
+  }, [location.state]);
+
   const [showLightbox, setShowLightbox] = useState(false);
   const [quantity, setQuantity] = useState(0);
   const [count, setCount] = useState(0);
   const [orders, setOrders] = useState([]);
-  const [showImg, setShowImg] = useState(
-    "https://red-parts.react.themeforest.scompiler.ru/themes/blue/images/products/product-8-1.jpg"
-  );
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // Set initial width for mobile detection
 
-  const images = [
-    {
-      img: "https://red-parts.react.themeforest.scompiler.ru/themes/blue/images/products/product-8-1.jpg",
-    },
-    {
-      img: "https://red-parts.react.themeforest.scompiler.ru/themes/blue/images/products/product-2-1.jpg",
-    },
-    {
-      img: "https://red-parts.react.themeforest.scompiler.ru/themes/blue/images/products/product-8-1.jpg",
-    },
-    {
-      img: "https://red-parts.react.themeforest.scompiler.ru/themes/blue/images/products/product-2-1.jpg",
-    },
-  ];
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // Set initial width for mobile detection
 
   useEffect(() => {
     const handleResize = () => {
@@ -74,6 +82,7 @@ function SingleProduct() {
           <div className="flex items-center justify-center fit-content md:h-[800px]">
             <div className="md:grid md:grid-cols-2">
               <Product
+                receivedAccessoryData={receivedAccessoryData} // Pass received data to Product component
                 setShowLightbox={setShowLightbox}
                 showLightbox={showLightbox}
                 showImg={showImg}
@@ -81,6 +90,7 @@ function SingleProduct() {
                 image={images}
               />
               <Info
+                receivedAccessoryData={receivedAccessoryData} // Pass received data to Info component
                 Cart={Cart}
                 quantity={quantity}
                 setQuantity={setQuantity}

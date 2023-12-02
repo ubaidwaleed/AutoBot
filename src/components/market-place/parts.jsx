@@ -4,6 +4,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { AiOutlineShoppingCart } from "@react-icons/all-files/ai/AiOutlineShoppingCart";
 import titleImage from "../../assets/images/titleImage.png";
+import { useEffect } from "react";
 
 const productsData = [
   {
@@ -46,6 +47,8 @@ const productsData = [
 ];
 
 const Parts = () => {
+  //Getting the parts data
+
   return (
     <div className="px-12 py-16 lg:px-20 md:px-16 sm:px-12" id="products">
       <div className="px-12 text-center text-black lg:px-60">

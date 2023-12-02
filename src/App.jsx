@@ -14,6 +14,7 @@ import Marketplace from "./pages/marketplace";
 import SingleProduct from "./pages/single-product";
 import Cart from "./pages/cart";
 import Checkout from "./pages/checkout";
+import ShopAccessories from "./pages/shopAccessories";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
       <Route path="/marketplace" element={<Marketplace />} />
       <Route path="/autobot" element={<AutoBot />} />
       <Route path="/shop" element={<Shop />} />
+      <Route path="/shop-accessories" element={<ShopAccessories />} />
       <Route path="/single-product" element={<SingleProduct />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/checkout" element={<Checkout />} />
