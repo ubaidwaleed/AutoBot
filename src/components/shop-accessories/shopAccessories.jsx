@@ -83,40 +83,11 @@ const productsData = [
   },
 ];
 
-const Accessories = () => {
-  const [accessories, setAccessories] = useState([]);
+const Accessories = ({ accessories }) => {
   const navigate = useNavigate();
 
-  //Getting the accessories data
-  useEffect(() => {
-    const fetchAccessories = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/getaccessories/"); // Replace with your actual endpoint
-        if (!response.ok) {
-          throw new Error("Network response was not ok.");
-        }
-        const data = await response.json();
-        if (
-          data &&
-          data.message === "Accessories found" &&
-          data.data &&
-          data.data.accessoriesdata &&
-          data.data.accessoriesdata.length > 0
-        ) {
-          setAccessories(data.data.accessoriesdata.slice(0, 5)); // Limiting to three items
-        }
-      } catch (error) {
-        console.error("Error fetching accessories:", error);
-      }
-    };
-
-    fetchAccessories();
-  }, []);
-
-  console.log(accessories);
-
-  const handleAccessoryClick = (clickedAccessory) => {
-    navigate(`/single-product`, { state: { accessoryData: clickedAccessory } });
+  const handleAccessoryClick = (clickedProduct) => {
+    navigate(`/single-product`, { state: { productData: clickedProduct } });
   };
 
   return (

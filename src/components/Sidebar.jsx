@@ -9,6 +9,9 @@ import { AiOutlineShoppingCart } from "@react-icons/all-files/ai/AiOutlineShoppi
 import { FaCar } from "@react-icons/all-files/fa/FaCar";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
+import { FaShopify } from "react-icons/fa";
+import { useContext } from "react";
+import CartContext from "../context/cart-context/cartContext";
 
 const SidebarIcon = ({ icon, text = "tooltip", onClick }) => (
   <div className="sidebar-icon group" onClick={onClick}>
@@ -118,6 +121,8 @@ const UserMenu = () => {
 
 const Sidebar = () => {
   const navigate = useNavigate();
+
+  const { cartItems } = useContext(CartContext);
   return (
     <div className="fixed top-0 left-0 z-50 flex flex-col w-16 h-screen m-0 text-white bg-gray-900 shadow-lg">
       <div className="mt-5" />
@@ -139,11 +144,42 @@ const Sidebar = () => {
       />
 
       <SidebarIcon
-        icon={<AiOutlineShoppingCart size="28" />}
+        icon={<FaShopify size="28" />}
         text="Checkout our marketplace"
         onClick={() => navigate("/marketplace")}
       />
       <div className="flex-grow"></div>
+
+      <div style={{ position: "relative", display: "inline-block" }}>
+        {/* Display the cart items count */}
+        {cartItems.length > 0 && (
+          <div
+            style={{
+              position: "absolute",
+              top: "-10px", // Adjust this value to position the count properly
+              left: "32px", // Adjust this value to position the count properly
+              backgroundColor: "red",
+              color: "white",
+              borderRadius: "50%",
+              width: "28px",
+              height: "28px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: "1",
+            }}
+          >
+            {cartItems.length}
+          </div>
+        )}
+
+        {/* Render the shopping cart icon */}
+        <SidebarIcon
+          icon={<AiOutlineShoppingCart size="28" />}
+          text="Your shopping cart"
+          onClick={() => navigate("/cart")}
+        />
+      </div>
 
       <SidebarLine />
       <UserMenu />

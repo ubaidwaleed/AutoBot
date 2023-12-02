@@ -8,7 +8,7 @@ const Product = ({
   showImg,
   setShowImg,
   image = [],
-  receivedAccessoryData,
+  receivedProductData,
 }) => {
   const [active, setActive] = useState(0);
 

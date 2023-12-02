@@ -2,9 +2,23 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/market-place/footer";
+import { useContext } from "react";
+import CartContext from "../context/cart-context/cartContext";
+
 function Cart() {
   const navigate = useNavigate();
   const [total, setTotal] = useState(0);
+
+  const {
+    cartItems,
+    addToCart,
+    removeItem,
+    setCartTotal,
+    setCartSubTotal,
+    incrementQuantity,
+    decrementQuantity,
+  } = useContext(CartContext);
+
   // Replace the items fetched from localStorage with a dummy array
   const dummyItems = [
     {
@@ -62,45 +76,45 @@ function Cart() {
     setTotal(total);
   }, []);
 
-  const handleInc = (id) => {
-    const updatedItems = dummyItems.map((item) => {
-      if (item.id === id) {
-        return {
-          ...item,
-          quantity: item.quantity + 1,
-        };
-      }
-      return item;
-    });
-    // Update the dummyItems array with the modified item
-    // (In a real scenario, this would typically update state or some persistent storage)
-    // For the simulation, updating the local variable directly
-    dummyItems.splice(0, dummyItems.length, ...updatedItems);
-    navigate("/cart");
-  };
+  // const handleInc = (id) => {
+  //   const updatedItems = dummyItems.map((item) => {
+  //     if (item.id === id) {
+  //       return {
+  //         ...item,
+  //         quantity: item.quantity + 1,
+  //       };
+  //     }
+  //     return item;
+  //   });
+  //   // Update the dummyItems array with the modified item
+  //   // (In a real scenario, this would typically update state or some persistent storage)
+  //   // For the simulation, updating the local variable directly
+  //   dummyItems.splice(0, dummyItems.length, ...updatedItems);
+  //   navigate("/cart");
+  // };
 
-  const handleDec = (id) => {
-    const updatedItems = dummyItems.map((item) => {
-      if (item.id === id) {
-        const newQuantity = Math.max(1, item.quantity - 1);
-        return {
-          ...item,
-          quantity: newQuantity,
-        };
-      }
-      return item;
-    });
-    // Update the dummyItems array with the modified item
-    dummyItems.splice(0, dummyItems.length, ...updatedItems);
-    navigate("/cart");
-  };
+  // const handleDec = (id) => {
+  //   const updatedItems = dummyItems.map((item) => {
+  //     if (item.id === id) {
+  //       const newQuantity = Math.max(1, item.quantity - 1);
+  //       return {
+  //         ...item,
+  //         quantity: newQuantity,
+  //       };
+  //     }
+  //     return item;
+  //   });
+  //   // Update the dummyItems array with the modified item
+  //   dummyItems.splice(0, dummyItems.length, ...updatedItems);
+  //   navigate("/cart");
+  // };
 
-  const removeProduct = (id) => {
-    const updatedItems = dummyItems.filter((item) => item.id !== id);
-    // Update the dummyItems array by removing the specified item
-    dummyItems.splice(0, dummyItems.length, ...updatedItems);
-    navigate("/cart");
-  };
+  // const removeProduct = (id) => {
+  //   const updatedItems = dummyItems.filter((item) => item.id !== id);
+  //   // Update the dummyItems array by removing the specified item
+  //   dummyItems.splice(0, dummyItems.length, ...updatedItems);
+  //   navigate("/cart");
+  // };
 
   if (dummyItems.length === 0) {
     return (
@@ -143,7 +157,7 @@ function Cart() {
                     Shopping Cart
                   </h1>
                   <h2 className="text-3xl font-semibold">
-                    {dummyItems.length} Items
+                    {cartItems.length} Items
                   </h2>
                 </div>
                 <div className="flex flex-wrap mt-10 mb-5">
@@ -165,7 +179,7 @@ function Cart() {
                   className="cart-items-container"
                   style={{ maxHeight: "600px", overflowY: "auto" }}
                 >
-                  {dummyItems?.map((cart) => {
+                  {cartItems?.map((cart) => {
                     return (
                       <div
                         className="flex items-center justify-between px-6 py-5 hover:bg-gray-100 "
@@ -176,20 +190,20 @@ function Cart() {
                           <div className="w-20">
                             <img
                               className="h-24"
-                              src={cart?.image}
-                              alt={cart?.title}
+                              src={cart?.product?.images[0]}
+                              alt={cart?.product?.name}
                             />
                           </div>
                           <div className="flex flex-col justify-between flex-grow ml-4">
                             <span className="text-sm font-bold">
-                              {cart?.title}
+                              {cart?.product?.name}
                             </span>
                             <span className="text-xs text-red-500 capitalize">
-                              {cart?.category}
+                              {cart?.product?.category}
                             </span>
                             <div
                               className="text-xs font-semibold text-gray-500 cursor-pointer hover:text-red-500"
-                              onClick={() => removeProduct(cart?.id)}
+                              // onClick={() => removeProduct(cart?.id)}
                             >
                               Remove
                             </div>
@@ -199,7 +213,7 @@ function Cart() {
                           <svg
                             className="w-3 text-gray-600 cursor-pointer fill-current"
                             viewBox="0 0 448 512"
-                            onClick={() => handleDec(cart?.id)}
+                            // onClick={() => handleDec(cart?.id)}
                           >
                             <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
                           </svg>
@@ -212,21 +226,21 @@ function Cart() {
 
                           <svg
                             className="w-3 text-gray-600 cursor-pointer fill-current"
-                            onClick={() => handleInc(cart?.id)}
+                            // onClick={() => handleInc(cart?.id)}
                             viewBox="0 0 448 512"
                           >
                             <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
                           </svg>
                         </div>
                         <span className="w-1/5 text-sm font-semibold text-center">
-                          ${cart?.price}
+                          ${cart?.product?.price}
                         </span>
                         <span className="w-1/5 text-sm font-semibold text-center">
-                          ${(cart?.price * cart?.quantity).toFixed(2)}
+                          ${(cart?.product?.price * cart?.quantity).toFixed(2)}
                         </span>
                       </div>
                     );
-                  })}{" "}
+                  })}
                 </div>
 
                 {/* <Link
@@ -243,7 +257,7 @@ function Cart() {
                 </Link> */}
               </div>
             </div>
-            <div className="md:col-span-1">
+            {/* <div className="md:col-span-1">
               <div className="max-w-3xl px-6 py-4 mt-5 bg-white rounded md:shadow-lg">
                 <h1 className="pb-4 text-4xl font-semibold">Order Summary</h1>
                 <div className="flex justify-between mt-8">
@@ -274,7 +288,7 @@ function Cart() {
                   </Link>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

@@ -1,9 +1,9 @@
 import Sidebar from "../components/Sidebar";
-import Accessories from "../components/shop-accessories/shopAccessories";
 import { useState, useEffect } from "react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import Footer from "../components/market-place/footer";
+import Parts from "../components/shop-parts/shopParts";
 
 const PriceRangeSlider = ({ min, max, value, onChange }) => {
   return (
@@ -23,7 +23,7 @@ const PriceRangeSlider = ({ min, max, value, onChange }) => {
   );
 };
 
-const ShopAccessories = () => {
+const ShopParts = () => {
   const [sortingOrder, setSortingOrder] = useState(""); // Initialize with an empty string for default order
 
   const handleSortingChange = (order) => {
@@ -36,35 +36,36 @@ const ShopAccessories = () => {
     setPriceRange(value);
   };
 
-  const [accessories, setAccessories] = useState([]);
+  const [parts, setParts] = useState([]);
 
-  //Getting the accessories data
+  //getting the parts data
   useEffect(() => {
-    const fetchAccessories = async () => {
+    const fetchParts = async () => {
       try {
-        const response = await fetch("http://localhost:3000/getaccessories/"); // Replace with your actual endpoint
+        const response = await fetch("http://localhost:3000/getparts"); // Replace with your actual endpoint
         if (!response.ok) {
           throw new Error("Network response was not ok.");
         }
         const data = await response.json();
         if (
           data &&
-          data.message === "Accessories found" &&
+          data.message === "parts found" &&
           data.data &&
-          data.data.accessoriesdata &&
-          data.data.accessoriesdata.length > 0
+          data.data.partsdata &&
+          data.data.partsdata.length > 0
         ) {
-          setAccessories(data.data.accessoriesdata.slice(0, 5)); // Limiting to three items
+          setParts(data.data.partsdata.slice(0, 5)); // Limiting to three items
+          console.log("Parts data", parts);
         }
       } catch (error) {
-        console.error("Error fetching accessories:", error);
+        console.error("Error fetching parts:", error);
       }
     };
 
-    fetchAccessories();
+    fetchParts();
   }, []);
 
-  console.log(accessories);
+  console.log(parts);
 
   return (
     <>
@@ -205,7 +206,7 @@ const ShopAccessories = () => {
       <div className="relative ml-16"></div>
 
       <div className="relative ml-16">
-        <Accessories accessories={accessories} />
+        <Parts parts={parts} />
       </div>
       <div className="relative ml-16">
         <Footer />
@@ -214,4 +215,4 @@ const ShopAccessories = () => {
   );
 };
 
-export default ShopAccessories;
+export default ShopParts;

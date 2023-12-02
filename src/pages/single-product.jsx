@@ -21,16 +21,16 @@ function SingleProduct() {
   }
 
   //getting the data of this accessory from parent
-  const [receivedAccessoryData, setReceivedAccessoryData] = useState(null);
+  const [receivedProductData, setReceivedProductData] = useState(null);
 
   const [images, setImages] = useState([]);
   const [showImg, setShowImg] = useState();
 
   const location = useLocation();
   useEffect(() => {
-    if (location.state && location.state.accessoryData) {
-      const receivedData = location.state.accessoryData;
-      setReceivedAccessoryData(receivedData);
+    if (location.state && location.state.productData) {
+      const receivedData = location.state.productData;
+      setReceivedProductData(receivedData);
 
       // Update the images state with the received images
       if (receivedData.images && receivedData.images.length > 0) {
@@ -82,7 +82,7 @@ function SingleProduct() {
           <div className="flex items-center justify-center fit-content md:h-[800px]">
             <div className="md:grid md:grid-cols-2">
               <Product
-                receivedAccessoryData={receivedAccessoryData} // Pass received data to Product component
+                receivedProductData={receivedProductData} // Pass received data to Product component
                 setShowLightbox={setShowLightbox}
                 showLightbox={showLightbox}
                 showImg={showImg}
@@ -90,7 +90,7 @@ function SingleProduct() {
                 image={images}
               />
               <Info
-                receivedAccessoryData={receivedAccessoryData} // Pass received data to Info component
+                receivedProductData={receivedProductData} // Pass received data to Info component
                 Cart={Cart}
                 quantity={quantity}
                 setQuantity={setQuantity}
