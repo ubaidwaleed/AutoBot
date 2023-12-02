@@ -70,53 +70,32 @@ function Cart() {
   ];
 
   useEffect(() => {
-    const total = dummyItems.reduce((acc, item) => {
-      return acc + item.price * item.quantity;
-    }, 0);
-    setTotal(total);
-  }, []);
+    // Calculate total cost when cartItems change
+    const calculateTotal = () => {
+      let sum = 0;
+      cartItems.forEach((cart) => {
+        sum += cart.product.price * cart.quantity;
+      });
+      setTotal(sum);
+      setCartSubTotal(sum);
+    };
 
-  // const handleInc = (id) => {
-  //   const updatedItems = dummyItems.map((item) => {
-  //     if (item.id === id) {
-  //       return {
-  //         ...item,
-  //         quantity: item.quantity + 1,
-  //       };
-  //     }
-  //     return item;
-  //   });
-  //   // Update the dummyItems array with the modified item
-  //   // (In a real scenario, this would typically update state or some persistent storage)
-  //   // For the simulation, updating the local variable directly
-  //   dummyItems.splice(0, dummyItems.length, ...updatedItems);
-  //   navigate("/cart");
-  // };
+    calculateTotal(); // Calculate total initially
+  }, [cartItems]);
 
-  // const handleDec = (id) => {
-  //   const updatedItems = dummyItems.map((item) => {
-  //     if (item.id === id) {
-  //       const newQuantity = Math.max(1, item.quantity - 1);
-  //       return {
-  //         ...item,
-  //         quantity: newQuantity,
-  //       };
-  //     }
-  //     return item;
-  //   });
-  //   // Update the dummyItems array with the modified item
-  //   dummyItems.splice(0, dummyItems.length, ...updatedItems);
-  //   navigate("/cart");
-  // };
+  const increase = (index) => {
+    incrementQuantity(index);
+  };
 
-  // const removeProduct = (id) => {
-  //   const updatedItems = dummyItems.filter((item) => item.id !== id);
-  //   // Update the dummyItems array by removing the specified item
-  //   dummyItems.splice(0, dummyItems.length, ...updatedItems);
-  //   navigate("/cart");
-  // };
+  const decrease = (index) => {
+    decrementQuantity(index);
+  };
 
-  if (dummyItems.length === 0) {
+  const handleRemoveItem = (index) => {
+    removeItem(index);
+  };
+
+  if (cartItems.length === 0) {
     return (
       <>
         <Sidebar />
@@ -124,7 +103,7 @@ function Cart() {
           <h1 className="mb-8 text-4xl">Cart is Empty</h1>
           <div className="flex flex-col items-center">
             <Link
-              to="/products"
+              to="/marketplace"
               className="inline-flex items-center px-4 py-2 font-semibold text-white uppercase bg-indigo-500 rounded-md text-md hover:bg-indigo-600"
             >
               <svg
@@ -179,7 +158,7 @@ function Cart() {
                   className="cart-items-container"
                   style={{ maxHeight: "600px", overflowY: "auto" }}
                 >
-                  {cartItems?.map((cart) => {
+                  {cartItems?.map((cart, i) => {
                     return (
                       <div
                         className="flex items-center justify-between px-6 py-5 hover:bg-gray-100 "
@@ -203,7 +182,7 @@ function Cart() {
                             </span>
                             <div
                               className="text-xs font-semibold text-gray-500 cursor-pointer hover:text-red-500"
-                              // onClick={() => removeProduct(cart?.id)}
+                              onClick={() => handleRemoveItem(i)}
                             >
                               Remove
                             </div>
@@ -213,7 +192,7 @@ function Cart() {
                           <svg
                             className="w-3 text-gray-600 cursor-pointer fill-current"
                             viewBox="0 0 448 512"
-                            // onClick={() => handleDec(cart?.id)}
+                            onClick={() => decrease(i)}
                           >
                             <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
                           </svg>
@@ -222,11 +201,12 @@ function Cart() {
                             className="w-8 mx-2 text-center border"
                             type="text"
                             value={cart?.quantity}
+                            readOnly
                           />
 
                           <svg
                             className="w-3 text-gray-600 cursor-pointer fill-current"
-                            // onClick={() => handleInc(cart?.id)}
+                            onClick={() => increase(i)}
                             viewBox="0 0 448 512"
                           >
                             <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
@@ -242,27 +222,14 @@ function Cart() {
                     );
                   })}
                 </div>
-
-                {/* <Link
-                  to={"/products"}
-                  className="flex mt-10 text-sm font-semibold text-gray-900"
-                >
-                  <svg
-                    className="w-4 mr-2 text-gray-900 fill-current"
-                    viewBox="0 0 448 512"
-                  >
-                    <path d="M134.059 296H436c6.627 0 12-5.373 12-12v-56c0-6.627-5.373-12-12-12H134.059v-46.059c0-21.382-25.851-32.09-40.971-16.971L7.029 239.029c-9.373 9.373-9.373 24.569 0 33.941l86.059 86.059c15.119 15.119 40.971 4.411 40.971-16.971V296z" />
-                  </svg>
-                  Continue Shopping
-                </Link> */}
               </div>
             </div>
-            {/* <div className="md:col-span-1">
+            <div className="md:col-span-1">
               <div className="max-w-3xl px-6 py-4 mt-5 bg-white rounded md:shadow-lg">
                 <h1 className="pb-4 text-4xl font-semibold">Order Summary</h1>
                 <div className="flex justify-between mt-8">
                   <span className="text-sm font-semibold uppercase">
-                    Items {dummyItems?.length}
+                    Items : {cartItems?.length}
                   </span>
                   <span className="text-sm font-semibold">
                     ${total?.toFixed(2)}
@@ -288,7 +255,7 @@ function Cart() {
                   </Link>
                 </div>
               </div>
-            </div> */}
+            </div>
           </div>
         </div>
       </div>

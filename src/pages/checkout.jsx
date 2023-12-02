@@ -1,52 +1,110 @@
 import React from "react";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/market-place/footer";
-
-const products = [
-  {
-    id: 1,
-    name: "Nike Air Max Pro 8888 - Super Light",
-    size: "42EU - 8.5US",
-    price: 138.99,
-    image:
-      "https://images.unsplash.com/flagged/photo-1556637640-2c80d3201be8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-  },
-  {
-    id: 2,
-    name: "Nike Air Max Pro 8888 - Super Light",
-    size: "42EU - 8.5US",
-    price: 138.99,
-    image:
-      "https://images.unsplash.com/flagged/photo-1556637640-2c80d3201be8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-  },
-  {
-    id: 3,
-    name: "Nike Air Max Pro 8888 - Super Light",
-    size: "42EU - 8.5US",
-    price: 138.99,
-    image:
-      "https://images.unsplash.com/flagged/photo-1556637640-2c80d3201be8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-  },
-  {
-    id: 4,
-    name: "Nike Air Max Pro 8888 - Super Light",
-    size: "42EU - 8.5US",
-    price: 138.99,
-    image:
-      "https://images.unsplash.com/flagged/photo-1556637640-2c80d3201be8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-  },
-  {
-    id: 5,
-    name: "Nike Air Max Pro 8888 - Super Light",
-    size: "42EU - 8.5US",
-    price: 138.99,
-    image:
-      "https://images.unsplash.com/flagged/photo-1556637640-2c80d3201be8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-  },
-  // Add more product items as needed...
-];
+import { useContext } from "react";
+import CartContext from "../context/cart-context/cartContext";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import Modal from "react-modal";
+import { GiConfirmed } from "react-icons/gi";
 
 const Checkout = () => {
+  const { cartSubTotal, cartItems, clearCart } = useContext(CartContext);
+  const [showModal, setShowModal] = useState(false);
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+
+  const [shippingPrice, setShippingPrice] = useState(300);
+
+  const [shippingAddress, setShippingAddress] = useState({
+    firstName: "",
+    lastName: "",
+    address: "",
+    city: "",
+    zipCode: "",
+    email: "",
+    phone: "",
+  });
+
+  useEffect(() => {
+    setShippingAddress({
+      firstName,
+      lastName,
+      address,
+      city,
+      zipCode,
+      email,
+      phone,
+    });
+  }, [firstName, lastName, address, city, zipCode, email, phone]);
+
+  const itemsArray = cartItems.map((item, index) => {
+    return {
+      product_id: item.product.accessory_id,
+      category: item.product.category,
+      product_name: item.product.name,
+      quantity: item.quantity,
+    };
+  });
+
+  const orderDetails = {
+    items: itemsArray,
+    sub_total_price: cartSubTotal,
+    shipping_price: shippingPrice,
+    total_price: cartSubTotal + shippingPrice,
+    user_id: "user456",
+    payment_method: "COD",
+  };
+
+  const payload = {
+    order: orderDetails,
+    shipping_address: shippingAddress,
+  };
+
+  const handlePlaceOrder = () => {
+    // Mock URL for the API endpoint
+    const apiUrl = "http://localhost:3000/createorder";
+
+    fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // Include any necessary headers like authorization token
+      },
+      body: JSON.stringify(payload), // Send your payload here
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Handle the response from the server
+        console.log("Order:", payload);
+
+        console.log("Order placed:", data);
+        setShowModal(true);
+
+        // Optionally, perform any actions after successful order placement
+      })
+      .catch((error) => {
+        // Handle errors
+        console.error("There was a problem placing the order:", error);
+      });
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    clearCart();
+  };
+
   return (
     <>
       {" "}
@@ -143,22 +201,33 @@ const Checkout = () => {
               style={{ maxHeight: "400px", overflowY: "auto" }}
             >
               {/* Map over the products array */}
-              {products.map((product) => (
+              {cartItems.map((item) => (
                 <div
-                  key={product.id}
+                  key={item.product.id}
                   className="flex flex-col bg-white rounded-lg sm:flex-row"
                 >
                   <img
                     className="object-cover object-center h-24 m-2 border rounded-md w-28"
-                    src={product.image}
+                    src={item.product.images[0]}
                     alt=""
                   />
                   <div className="flex flex-col w-full px-4 py-4">
-                    <span className="font-semibold">{product.name}</span>
+                    <span className="font-semibold">{item.product.name}</span>
                     <span className="float-right text-gray-400">
-                      {product.size}
+                      {item.product.brand}
                     </span>
-                    <p className="text-lg font-bold">${product.price}</p>
+                    <p className="font-bold text-md">${item.product.price}</p>
+                    {/* Display "Quanty" label and "10" below quantity */}
+                  </div>
+
+                  <div className="text-right">
+                    <span className="float-right text-gray-400">
+                      {" "}
+                      x {item.quantity}
+                    </span>
+                    <span className="float-right text-lg font-bold">
+                      {"$" + item.product.price * item.quantity}
+                    </span>
                   </div>
                 </div>
               ))}
@@ -268,6 +337,8 @@ const Checkout = () => {
                       name="firstName"
                       className="w-full px-4 py-3 text-sm border border-gray-200 rounded-md shadow-sm outline-none pl-11 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                       placeholder="Your first name here"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
                     />
                     <div className="absolute inset-y-0 left-0 inline-flex items-center px-3 pointer-events-none">
                       <svg
@@ -301,6 +372,8 @@ const Checkout = () => {
                       name="lastName"
                       className="w-full px-4 py-3 text-sm border border-gray-200 rounded-md shadow-sm outline-none pl-11 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                       placeholder="Your last name here"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
                     />
                     <div className="absolute inset-y-0 left-0 inline-flex items-center px-3 pointer-events-none">
                       <svg
@@ -334,6 +407,8 @@ const Checkout = () => {
                   name="address"
                   className="w-full px-4 py-3 text-sm border border-gray-200 rounded-md shadow-sm outline-none pl-11 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                   placeholder="Your address here"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
                 />
                 <div className="absolute inset-y-0 left-0 inline-flex items-center px-3 pointer-events-none">
                   <svg
@@ -367,6 +442,8 @@ const Checkout = () => {
                       name="city"
                       className="w-full px-4 py-3 text-sm border border-gray-200 rounded-md shadow-sm outline-none pl-11 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                       placeholder="Your city here"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
                     />
                     <div className="absolute inset-y-0 left-0 inline-flex items-center px-3 pointer-events-none">
                       <svg
@@ -401,6 +478,8 @@ const Checkout = () => {
                       name="zipCode"
                       className="w-full px-4 py-3 text-sm border border-gray-200 rounded-md shadow-sm outline-none pl-11 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                       placeholder="Your zip code here"
+                      value={zipCode}
+                      onChange={(e) => setZipCode(e.target.value)}
                     />
                     <div className="absolute inset-y-0 left-0 inline-flex items-center px-3 pointer-events-none">
                       <svg
@@ -434,6 +513,8 @@ const Checkout = () => {
                   name="email"
                   className="w-full px-4 py-3 text-sm border border-gray-200 rounded-md shadow-sm outline-none pl-11 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                   placeholder="your.email@gmail.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 <div className="absolute inset-y-0 left-0 inline-flex items-center px-3 pointer-events-none">
                   <svg
@@ -465,6 +546,8 @@ const Checkout = () => {
                   name="phone"
                   className="w-full px-4 py-3 text-sm border border-gray-200 rounded-md shadow-sm outline-none pl-11 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                   placeholder="Your phone number here"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                 />
                 <div className="absolute inset-y-0 left-0 inline-flex items-center px-3 pointer-events-none">
                   <svg
@@ -567,19 +650,26 @@ const Checkout = () => {
               <div className="py-2 mt-6 border-t border-b">
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-medium text-gray-900">Subtotal</p>
-                  <p className="font-semibold text-gray-900">$399.00</p>
+                  <p className="font-semibold text-gray-900">${cartSubTotal}</p>
                 </div>
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-medium text-gray-900">Shipping</p>
-                  <p className="font-semibold text-gray-900">$8.00</p>
+                  <p className="font-semibold text-gray-900">
+                    To be calculated upon delivery
+                  </p>
                 </div>
               </div>
               <div className="flex items-center justify-between mt-6">
                 <p className="text-sm font-medium text-gray-900">Total</p>
-                <p className="text-2xl font-semibold text-gray-900">$408.00</p>
+                <p className="text-2xl font-semibold text-gray-900">
+                  ${cartSubTotal}
+                </p>
               </div>
             </div>
-            <button className="w-full px-6 py-3 mt-4 mb-8 font-medium text-white bg-gray-900 rounded-md">
+            <button
+              className="w-full px-6 py-3 mt-4 mb-8 font-medium text-white bg-gray-900 rounded-md"
+              onClick={handlePlaceOrder}
+            >
               Place Order
             </button>
           </div>
@@ -588,6 +678,31 @@ const Checkout = () => {
       <div className="relative ml-16 ">
         <Footer />
       </div>
+      <Modal
+        isOpen={showModal}
+        onRequestClose={handleCloseModal}
+        className="fixed top-0 left-0 flex items-center justify-center w-full h-full"
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+        }}
+      >
+        <div className="p-12 bg-white rounded-lg shadow-2xl">
+          <h1 className="flex items-center justify-center text-4xl font-bold">
+            Order Confirmed
+            <GiConfirmed className="ml-2 text-4xl text-green-500" />{" "}
+            {/* Change icon color to green */}
+          </h1>
+          <div className="mt-4">
+            <Link
+              to="/marketplace"
+              className="block w-full px-4 py-2 mt-8 text-center text-white transition duration-300 bg-blue-500 rounded-md hover:bg-blue-600"
+              onClick={handleCloseModal}
+            >
+              Close
+            </Link>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 };
