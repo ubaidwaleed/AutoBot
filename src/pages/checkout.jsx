@@ -12,41 +12,50 @@ const Checkout = () => {
   const { cartSubTotal, cartItems, clearCart } = useContext(CartContext);
   const [showModal, setShowModal] = useState(false);
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [firstname, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
-  const [zipCode, setZipCode] = useState("");
+  const [zip_code, setZipCode] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
 
   const [shippingPrice, setShippingPrice] = useState(300);
 
   const [shippingAddress, setShippingAddress] = useState({
-    firstName: "",
-    lastName: "",
+    firstname: "",
+    lastname: "",
     address: "",
     city: "",
-    zipCode: "",
+    zip_code: "",
     email: "",
     phone: "",
   });
 
+  console.log(cartItems);
+
   useEffect(() => {
     setShippingAddress({
-      firstName,
-      lastName,
+      firstname,
+      lastname,
       address,
       city,
-      zipCode,
+      zip_code,
       email,
       phone,
     });
-  }, [firstName, lastName, address, city, zipCode, email, phone]);
+  }, [firstname, lastname, address, city, zip_code, email, phone]);
 
-  const itemsArray = cartItems.map((item, index) => {
+  const itemsArray = cartItems.map((item) => {
+    let productId;
+    if (item.product.accessory_id) {
+      productId = item.product.accessory_id;
+    } else if (item.product.part_id) {
+      productId = item.product.part_id;
+    }
+
     return {
-      product_id: item.product.accessory_id,
+      product_id: productId,
       category: item.product.category,
       product_name: item.product.name,
       quantity: item.quantity,
@@ -75,7 +84,6 @@ const Checkout = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // Include any necessary headers like authorization token
       },
       body: JSON.stringify(payload), // Send your payload here
     })
@@ -91,8 +99,6 @@ const Checkout = () => {
 
         console.log("Order placed:", data);
         setShowModal(true);
-
-        // Optionally, perform any actions after successful order placement
       })
       .catch((error) => {
         // Handle errors
@@ -337,7 +343,7 @@ const Checkout = () => {
                       name="firstName"
                       className="w-full px-4 py-3 text-sm border border-gray-200 rounded-md shadow-sm outline-none pl-11 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                       placeholder="Your first name here"
-                      value={firstName}
+                      value={firstname}
                       onChange={(e) => setFirstName(e.target.value)}
                     />
                     <div className="absolute inset-y-0 left-0 inline-flex items-center px-3 pointer-events-none">
@@ -372,7 +378,7 @@ const Checkout = () => {
                       name="lastName"
                       className="w-full px-4 py-3 text-sm border border-gray-200 rounded-md shadow-sm outline-none pl-11 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                       placeholder="Your last name here"
-                      value={lastName}
+                      value={lastname}
                       onChange={(e) => setLastName(e.target.value)}
                     />
                     <div className="absolute inset-y-0 left-0 inline-flex items-center px-3 pointer-events-none">
@@ -478,7 +484,7 @@ const Checkout = () => {
                       name="zipCode"
                       className="w-full px-4 py-3 text-sm border border-gray-200 rounded-md shadow-sm outline-none pl-11 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                       placeholder="Your zip code here"
-                      value={zipCode}
+                      value={zip_code}
                       onChange={(e) => setZipCode(e.target.value)}
                     />
                     <div className="absolute inset-y-0 left-0 inline-flex items-center px-3 pointer-events-none">

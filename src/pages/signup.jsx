@@ -2,9 +2,73 @@ import { useNavigate } from "react-router-dom";
 
 import logo1 from "../assets/images/autobot-logo1.png";
 import autobot1 from "../assets/images/autobot1.png";
+import { useState } from "react";
+import { supabase } from "../supabase/client";
 
 function SignUp() {
   const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const { password, confirmPassword } = formData;
+
+    if (password === confirmPassword) {
+      // Passwords match, proceed with form submission
+      setPasswordsMatch(true);
+      console.log("Form submitted with valid data:", formData);
+
+      // Submitting to Supabase
+      try {
+        const { data, error } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            data: {
+              full_name: formData.name,
+            },
+          },
+        });
+
+        // Log the response from Supabase
+        if (error) {
+          console.error("Sign up error:", error);
+          alert("Error signing up. Please try again."); // Show an error message to the user
+        } else {
+          console.log("Sign up successful. Response data:", data);
+          alert("Check your email for verification link");
+          setFormData({
+            email: "",
+            password: "",
+            confirmPassword: "",
+            name: "",
+          });
+        }
+      } catch (error) {
+        console.error("Caught an exception:", error);
+        alert("An error occurred. Please try again."); // Show an error message to the user
+      }
+    } else {
+      // Passwords don't match, indicate the error
+      setPasswordsMatch(false);
+    }
+  };
 
   return (
     <>
@@ -21,7 +85,7 @@ function SignUp() {
               Create a new account
             </h1>
 
-            <form className="mt-6" action="#" method="POST">
+            <form className="mt-6" onSubmit={handleSubmit}>
               <div>
                 <label className="block text-gray-700">Name</label>
                 <input
@@ -31,6 +95,8 @@ function SignUp() {
                   placeholder="Enter Your Name"
                   className="w-full px-4 py-3 mt-2 bg-gray-200 border rounded-lg focus:border-blue-500 focus:bg-white focus:outline-none"
                   required
+                  value={formData.name}
+                  onChange={handleInputChange}
                 />
               </div>
 
@@ -43,18 +109,8 @@ function SignUp() {
                   placeholder="Enter Email Address"
                   className="w-full px-4 py-3 mt-2 bg-gray-200 border rounded-lg focus:border-blue-500 focus:bg-white focus:outline-none"
                   required
-                />
-              </div>
-
-              <div className="mt-4">
-                <label className="block text-gray-700">Phone Number</label>
-                <input
-                  type="tel" // Change input type to "tel" for the phone number
-                  name="phone" // Provide a name attribute for the phone number input
-                  id="phone" // Provide a unique id for the phone number input
-                  placeholder="Enter Phone Number"
-                  className="w-full px-4 py-3 mt-2 bg-gray-200 border rounded-lg focus:border-blue-500 focus:bg-white focus:outline-none"
-                  required
+                  value={formData.email}
+                  onChange={handleInputChange}
                 />
               </div>
 
@@ -68,7 +124,31 @@ function SignUp() {
                   minLength="6"
                   className="w-full px-4 py-3 mt-2 bg-gray-200 border rounded-lg focus:border-blue-500 focus:bg-white focus:outline-none"
                   required
+                  value={formData.password}
+                  onChange={handleInputChange}
                 />
+              </div>
+
+              <div className="mt-4">
+                <label className="block text-gray-700">Confirm Password</label>
+                <input
+                  type="password"
+                  name="confirmPassword" // Provide a name attribute for the password input
+                  id="password" // Provide a unique id for the password input
+                  placeholder="Confirm Password"
+                  minLength="6"
+                  className={`w-full px-4 py-3 mt-2 bg-gray-200 border rounded-lg focus:border-blue-500 focus:bg-white focus:outline-none ${
+                    !passwordsMatch ? "border-red-500" : ""
+                  }`}
+                  required
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
+                />
+                {!passwordsMatch && (
+                  <p className="mt-1 text-sm text-red-500">
+                    Passwords do not match.
+                  </p>
+                )}
               </div>
 
               <button

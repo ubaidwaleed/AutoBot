@@ -1,15 +1,52 @@
 import { useNavigate } from "react-router-dom";
 import logo1 from "../assets/images/autobot-logo1.png";
 import autobot1 from "../assets/images/autobot1.png";
+import { supabase } from "../supabase/client";
+import { useState, useEffect } from "react";
 
-function Login() {
+function Login({ setToken }) {
   const navigate = useNavigate();
-  const handleLogin = () => {
-    // Perform your login logic here
 
-    // Assuming the login was successful, navigate to the home page
-    navigate("/home");
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    console.log("Form submitted with valid data:", formData);
+
+    // Submitting to Supabase
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      // Log the response from Supabase
+      if (error) {
+        console.error("Sign in error:", error);
+        alert("Error signing in. Please try again."); // Show an error message to the user
+      } else {
+        console.log(data);
+        setToken(data);
+        navigate("/home");
+      }
+    } catch (error) {
+      console.error("Caught an exception:", error);
+      alert("An error occurred. Please try again."); // Show an error message to the user
+    }
+  };
+
   return (
     <>
       <section className="flex flex-col items-center h-screen md:flex-row">
@@ -25,16 +62,18 @@ function Login() {
               Log in to your account
             </h1>
 
-            <form className="mt-6" action="#" method="POST">
+            <form className="mt-6" onSubmit={handleSubmit}>
               <div>
                 <label className="block text-gray-700">Email Address</label>
                 <input
                   type="email"
-                  name=""
-                  id=""
+                  name="email" // Provide name attribute
+                  id="email" // Provide id attribute
                   placeholder="Enter Email Address"
                   className="w-full px-4 py-3 mt-2 bg-gray-200 border rounded-lg focus:border-blue-500 focus:bg-white focus:outline-none"
                   required
+                  value={formData.email}
+                  onChange={handleInputChange}
                 />
               </div>
 
@@ -42,12 +81,14 @@ function Login() {
                 <label className="block text-gray-700">Password</label>
                 <input
                   type="password"
-                  name=""
-                  id=""
+                  name="password" // Provide name attribute
+                  id="password" // Provide id attribute
                   placeholder="Enter Password"
                   minLength="6"
                   className="w-full px-4 py-3 mt-2 bg-gray-200 border rounded-lg focus:border-blue-500 focus:bg-white focus:outline-none"
                   required
+                  value={formData.password}
+                  onChange={handleInputChange}
                 />
               </div>
 
@@ -61,7 +102,6 @@ function Login() {
               </div>
 
               <button
-                onClick={handleLogin}
                 type="submit"
                 className="block w-full px-4 py-3 mt-6 font-semibold text-white duration-300 bg-indigo-500 rounded-lg hover:-translate-y-1 hover:scale-100 hover:bg-indigo-400 focus:bg-indigo-400 "
               >

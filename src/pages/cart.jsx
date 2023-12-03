@@ -127,7 +127,7 @@ function Cart() {
     <>
       <Sidebar />
       <div className="relative ml-16 ">
-        <div className="container mx-auto mt-16 mb-[52px]">
+        <div className="container mx-auto mt-16 mb-[188px]">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             <div className="col-span-2">
               <div className="max-w-5xl px-6 py-4 bg-white rounded md:shadow-lg ">

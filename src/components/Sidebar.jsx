@@ -12,6 +12,7 @@ import { useEffect, useState, useRef } from "react";
 import { FaShopify } from "react-icons/fa";
 import { useContext } from "react";
 import CartContext from "../context/cart-context/cartContext";
+import { TbLogout2 } from "react-icons/tb";
 
 const SidebarIcon = ({ icon, text = "tooltip", onClick }) => (
   <div className="sidebar-icon group" onClick={onClick}>
@@ -122,6 +123,13 @@ const UserMenu = () => {
 const Sidebar = () => {
   const navigate = useNavigate();
 
+  const token = JSON.parse(sessionStorage.getItem("token"));
+
+  function handleLogout() {
+    sessionStorage.removeItem("token");
+    navigate("/");
+  }
+
   const { cartItems } = useContext(CartContext);
   return (
     <div className="fixed top-0 left-0 z-50 flex flex-col w-16 h-screen m-0 text-white bg-gray-900 shadow-lg">
@@ -184,7 +192,11 @@ const Sidebar = () => {
       <SidebarLine />
       <UserMenu />
 
-      <SidebarIcon icon={<RiSettings3Fill size="28" />} text="Settings" />
+      <SidebarIcon
+        icon={<TbLogout2 size="28" />}
+        text="Logout"
+        onClick={handleLogout}
+      />
       <div className="mb-5" />
     </div>
   );
