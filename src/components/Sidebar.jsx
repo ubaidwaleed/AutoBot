@@ -126,11 +126,13 @@ const Sidebar = () => {
   const token = JSON.parse(sessionStorage.getItem("token"));
 
   function handleLogout() {
+    clearCart();
+
     sessionStorage.removeItem("token");
     navigate("/");
   }
 
-  const { cartItems } = useContext(CartContext);
+  const { cartItems, clearCart } = useContext(CartContext);
   return (
     <div className="fixed top-0 left-0 z-50 flex flex-col w-16 h-screen m-0 text-white bg-gray-900 shadow-lg">
       <div className="mt-5" />

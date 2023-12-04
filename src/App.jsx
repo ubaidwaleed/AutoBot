@@ -54,7 +54,11 @@ function App() {
           ""
         )}
         {token ? <Route path="/cart" element={<Cart />} /> : ""}
-        {token ? <Route path="/checkout" element={<Checkout />} /> : ""}
+        {token ? (
+          <Route path="/checkout" element={<Checkout token={token} />} />
+        ) : (
+          ""
+        )}
       </Routes>
     </CartContextProvider>
   );

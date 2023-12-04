@@ -103,7 +103,7 @@ const ShopAccessories = () => {
   if (accessories) {
     filteredAccessories = accessories.filter(
       (val) =>
-        (selectedCategory === "All" || val.category === selectedCategory) &&
+        (selectedCategory === "All" || val.subcategory === selectedCategory) &&
         (selectedMake === "All" || val.brand === selectedMake) &&
         (selectedModel === "All" || val.compatibility.includes(selectedModel))
     );

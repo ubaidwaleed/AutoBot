@@ -248,7 +248,7 @@ function Cart() {
                     Proceed to Checkout
                   </Link>
                   <Link
-                    to="/products"
+                    to="/marketplace"
                     className="block w-full py-2 mt-4 text-sm font-semibold text-center text-gray-900 hover:text-indigo-500"
                   >
                     Continue Shopping

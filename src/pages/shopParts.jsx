@@ -26,8 +26,22 @@ const PriceRangeSlider = ({ min, max, value, onChange }) => {
 const ShopParts = () => {
   const [sortingOrder, setSortingOrder] = useState(""); // Initialize with an empty string for default order
 
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedMake, setSelectedMake] = useState("All");
+  const [selectedModel, setSelectedModel] = useState("All");
+
   const handleSortingChange = (order) => {
     setSortingOrder(order);
+  };
+
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+  };
+  const handleMakeChange = (e) => {
+    setSelectedMake(e.target.value);
+  };
+  const handleModelChange = (e) => {
+    setSelectedModel(e.target.value);
   };
 
   const [priceRange, setPriceRange] = useState([0, 1000]); // Initial values, adjust as needed
@@ -65,7 +79,38 @@ const ShopParts = () => {
     fetchParts();
   }, []);
 
+  const sortAccessories = (order) => {
+    const sortedAccessories = [...parts]; // Create a copy of the accessories array
+
+    if (order === "lowToHigh") {
+      sortedAccessories.sort((a, b) => a.price - b.price); // Sort low to high based on price
+    } else if (order === "highToLow") {
+      sortedAccessories.sort((a, b) => b.price - a.price); // Sort high to low based on price
+    }
+
+    setParts(sortedAccessories); // Update the state with sorted accessories
+  };
+
+  useEffect(() => {
+    // Whenever the sortingOrder changes, trigger sorting
+    if (sortingOrder !== "") {
+      sortAccessories(sortingOrder);
+    }
+  }, [sortingOrder]);
+
   console.log(parts);
+  var filteredParts = [];
+
+  if (parts) {
+    filteredParts = parts.filter(
+      (val) =>
+        (selectedCategory === "All" || val.subcategory === selectedCategory) &&
+        (selectedMake === "All" || val.brand === selectedMake) &&
+        (selectedModel === "All" || val.compatibility.includes(selectedModel))
+    );
+
+    console.log(filteredParts);
+  }
 
   return (
     <>
@@ -118,37 +163,35 @@ const ShopParts = () => {
                       <div className="grid grid-cols-2 gap-4 mt-4 md:grid-cols-3 xl:grid-cols-4">
                         <select
                           className="w-full px-4 py-3 text-sm bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
-                          defaultValue="" // Set an initial default value (empty string)
+                          value={selectedCategory}
+                          onChange={handleCategoryChange}
                         >
-                          <option value="" disabled hidden>
-                            Select a Category
-                          </option>
-                          <option value="for-rent">Accessories</option>
-                          <option value="for-sale">Parts</option>
+                          <option value="All">Select a Category</option>
+                          <option value="Interior">Interior</option>
+                          <option value="Exterior">Exterior</option>
                         </select>
 
                         <select
                           className="w-full px-4 py-3 text-sm bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
-                          defaultValue="" // Set an initial default value (empty string)
+                          value={selectedMake}
+                          onChange={handleMakeChange}
                         >
-                          <option value="" disabled hidden>
-                            Select Make
-                          </option>
+                          <option value="All">Select Make</option>
                           <option value="Toyota">Toyota</option>
                           <option value="Honda">Honda</option>
-                          <option value="Ford">Ford</option>
+                          <option value="Suzuki">Suzuki</option>
                         </select>
 
                         <select
                           className="w-full px-4 py-3 text-sm bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
-                          defaultValue="" // Set an initial default value (empty string)
+                          value={selectedModel}
+                          onChange={handleModelChange}
                         >
-                          <option value="" disabled hidden>
-                            Select Model
-                          </option>
-                          <option value="Camry">Camry</option>
+                          <option value="All">Select Model</option>
                           <option value="Civic">Civic</option>
-                          <option value="F-150">F-150</option>
+                          <option value="Mehran">Mehran</option>
+                          <option value="Corolla">Corolla</option>
+                          <option value="Alto">Alto</option>
                         </select>
 
                         <select
@@ -206,7 +249,7 @@ const ShopParts = () => {
       <div className="relative ml-16"></div>
 
       <div className="relative ml-16">
-        <Parts parts={parts} />
+        <Parts parts={filteredParts} />
       </div>
       <div className="relative ml-16">
         <Footer />

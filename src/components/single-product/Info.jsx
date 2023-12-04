@@ -34,7 +34,34 @@ const Info = ({
     }
   };
 
+  // const handleAddToCart = () => {
+  //   const calculatedPrice = receivedProductData?.price * selectedQuantity;
+
+  //   const cartItem = {
+  //     product: receivedProductData,
+  //     quantity: selectedQuantity,
+  //     calculatedPrice: calculatedPrice,
+  //   };
+
+  //   addToCart(cartItem);
+  //   console.log(cartItem);
+  // };
+
   const handleAddToCart = () => {
+    // Check if the item with the same ID exists in cartItems
+    const isItemInCart = cartItems.find(
+      (item) =>
+        (item.product.part_id &&
+          item.product.part_id === receivedProductData.part_id) ||
+        (item.product.accessory_id &&
+          item.product.accessory_id === receivedProductData.accessory_id)
+    );
+
+    if (isItemInCart) {
+      setError("Item already added to cart");
+      return; // Prevent further execution
+    }
+
     const calculatedPrice = receivedProductData?.price * selectedQuantity;
 
     const cartItem = {
@@ -105,6 +132,9 @@ const Info = ({
             <FaCartPlus />
             <span className="select-none ">Add to cart</span>
           </button>
+          <p className="absolute bottom-0 text-red-500 md:-bottom-5 md:left-0 md:text-sm">
+            {error}
+          </p>
         </div>
       </div>
     </div>

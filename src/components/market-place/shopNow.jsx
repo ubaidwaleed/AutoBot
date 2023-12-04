@@ -3,6 +3,13 @@ import "./shopNow.css";
 import img2 from "../../assets/images/cta_icon.png";
 
 const ShopNow = () => {
+  const scrollToSection = () => {
+    const yOffset = 3800; // Change this value to the desired Y-coordinate
+    window.scrollTo({
+      top: yOffset,
+      behavior: "smooth",
+    });
+  };
   return (
     <div className="py-20 meet-bg">
       <div className="px-12 lg:px-20 md:px-16 sm:px-12">
@@ -24,7 +31,10 @@ const ShopNow = () => {
               </p>
               {/* <img className="py-2 pb-6" src={titleImg} alt="" /> */}
               <div className="py-2">
-                <button className="bg-[#1a79ff] text-[#1C1421] px-6 py-3 font-semibold banner-btn">
+                <button
+                  className="bg-[#1a79ff] text-[#1C1421] px-6 py-3 font-semibold banner-btn"
+                  onClick={scrollToSection}
+                >
                   Explore Now
                 </button>
               </div>

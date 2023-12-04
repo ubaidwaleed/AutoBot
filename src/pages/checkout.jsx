@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import Modal from "react-modal";
 import { GiConfirmed } from "react-icons/gi";
 
-const Checkout = () => {
+const Checkout = ({ token }) => {
   const { cartSubTotal, cartItems, clearCart } = useContext(CartContext);
   const [showModal, setShowModal] = useState(false);
 
@@ -67,7 +67,7 @@ const Checkout = () => {
     sub_total_price: cartSubTotal,
     shipping_price: shippingPrice,
     total_price: cartSubTotal + shippingPrice,
-    user_id: "user456",
+    user_id: token.user.id,
     payment_method: "COD",
   };
 
@@ -76,34 +76,72 @@ const Checkout = () => {
     shipping_address: shippingAddress,
   };
 
+  const [formErrors, setFormErrors] = useState({
+    firstname: false,
+    lastname: false,
+    address: false,
+    city: false,
+    zip_code: false,
+    email: false,
+    phone: false,
+  });
+
+  const validateForm = () => {
+    const errors = {
+      firstname: firstname === "",
+      lastname: lastname === "",
+      address: address === "",
+      city: city === "",
+      zip_code: zip_code === "",
+      email: email === "",
+      phone: phone === "",
+    };
+    setFormErrors(errors);
+    return Object.values(errors).some((error) => error);
+  };
+
   const handlePlaceOrder = () => {
-    // Mock URL for the API endpoint
-    const apiUrl = "http://localhost:3000/createorder";
+    // const isEmptyField = Object.values(shippingAddress).some(
+    //   (field) => field === ""
+    // );
 
-    fetch(apiUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload), // Send your payload here
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        // Handle the response from the server
-        console.log("Order:", payload);
+    // if (isEmptyField) {
+    //   // If any field is empty, prevent placing the order
+    //   alert("Please fill in all fields before placing the order.");
+    //   return;
+    // }
 
-        console.log("Order placed:", data);
-        setShowModal(true);
+    const hasErrors = validateForm();
+
+    if (!hasErrors) {
+      // Mock URL for the API endpoint
+      const apiUrl = "http://localhost:3000/createorder";
+
+      fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload), // Send your payload here
       })
-      .catch((error) => {
-        // Handle errors
-        console.error("There was a problem placing the order:", error);
-      });
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // Handle the response from the server
+          console.log("Order:", payload);
+
+          console.log("Order placed:", data);
+          setShowModal(true);
+        })
+        .catch((error) => {
+          // Handle errors
+          console.error("There was a problem placing the order:", error);
+        });
+    }
   };
 
   const handleCloseModal = () => {
@@ -514,7 +552,7 @@ const Checkout = () => {
               </label>
               <div className="relative">
                 <input
-                  type="text"
+                  type="email"
                   id="email"
                   name="email"
                   className="w-full px-4 py-3 text-sm border border-gray-200 rounded-md shadow-sm outline-none pl-11 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
@@ -671,6 +709,11 @@ const Checkout = () => {
                   ${cartSubTotal}
                 </p>
               </div>
+            </div>
+            <div className="mt-4 text-red-500">
+              {Object.keys(formErrors).some((key) => formErrors[key]) && (
+                <p>Please fill in all fields before placing the order.</p>
+              )}
             </div>
             <button
               className="w-full px-6 py-3 mt-4 mb-8 font-medium text-white bg-gray-900 rounded-md"
