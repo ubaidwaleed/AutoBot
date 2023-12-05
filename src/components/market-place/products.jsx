@@ -13,27 +13,23 @@ import { useNavigate } from "react-router-dom";
 const products = [
   {
     title: "Vehicle Parts",
-    image_url:
-      "https://www.championusedautopartsmd.com/wp-content/uploads/sites/463/2022/12/auto-parts.jpg",
+    image_url: "src/assets/images/marketplace/auto-parts.jpg",
     to: "/shop-parts",
   },
   {
     title: "Vehicle Accessories",
-    image_url:
-      "https://autoupgrade.org/wp-content/uploads/2023/08/8-Essential-Car-Accessories-That-Every-Car-Owner-Should-Have.webp",
+    image_url: "src/assets/images/marketplace/auto-accessories.jpg",
     to: "/shop-accessories",
   },
   {
     title: "Vehicle Care Products",
-    image_url:
-      "https://vader-prod.s3.amazonaws.com/1677510971-meguiar-s-1677510947.jpg",
+    image_url: "src/assets/images/marketplace/auto-cleaning.jpg",
     to: "/shop-accessories",
   },
   {
     title: "Interior/Exterior",
-    image_url:
-      "https://thenewswheel.com/wp-content/uploads/2018/04/Steampunk-car-vehicle-modification-style-paint-ideas-tips-accessory-cabin-interior-exterior-Victorian-fantasy.jpg",
-    to: "/shop-accessories",
+    image_url: "src/assets/images/marketplace/interior-exterior.jpg",
+    to: "/shop-interiorexterior",
   },
 ];
 

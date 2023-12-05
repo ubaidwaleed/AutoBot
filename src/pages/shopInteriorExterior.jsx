@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import Footer from "../components/market-place/footer";
-import Parts from "../components/shop-parts/shopParts";
+import InteriorExterior from "../components/shop-interior-exterior/shopInteriorExterior";
 
 const PriceRangeSlider = ({ min, max, value, onChange }) => {
   return (
@@ -23,7 +23,7 @@ const PriceRangeSlider = ({ min, max, value, onChange }) => {
   );
 };
 
-const ShopParts = () => {
+const ShopInteriorExterior = () => {
   const [sortingOrder, setSortingOrder] = useState(""); // Initialize with an empty string for default order
 
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -281,7 +281,7 @@ const ShopParts = () => {
       <div className="relative ml-16"></div>
 
       <div className="relative mt-2 ml-16">
-        <Parts parts={filteredParts} />
+        <InteriorExterior parts={filteredParts} />
       </div>
       <div className="relative ml-16">
         <Footer />
@@ -290,4 +290,4 @@ const ShopParts = () => {
   );
 };
 
-export default ShopParts;
+export default ShopInteriorExterior;

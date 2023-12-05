@@ -122,7 +122,7 @@ const Parts = () => {
                   alt={part.name}
                 />
                 <p className="px-4 py-2 bg-[#1a79ff] font-medium inline-block text-sm product-name text-white">
-                  {part.name}
+                  {part.name.split(" ").slice(0, 2).join(" ")}
                 </p>
               </div>
               <div className="px-4 py-8 mt-2 text-black ">

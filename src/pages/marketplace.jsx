@@ -57,10 +57,8 @@ function Marketplace() {
                   <option value="Toyota">Toyota</option>
                   <option value="Honda">Honda</option>
                   <option value="Ford">Ford</option>
-                  {/* Add more make options here */}
                 </select>
               </div>
-              {/* Dropdown 2 - Model */}
               <div className="relative">
                 <select
                   className="p-3 m-1 bg-white border border-gray-300 rounded w-[320px] h-[50px]" // Increased width and height
@@ -71,10 +69,8 @@ function Marketplace() {
                   <option value="Camry">Camry</option>
                   <option value="Civic">Civic</option>
                   <option value="F-150">F-150</option>
-                  {/* Add more model options here */}
                 </select>
               </div>
-              {/* Dropdown 3 - Variant */}
               <div className="relative">
                 <select
                   className="p-3 m-1 bg-white border border-gray-300 rounded w-[320px] h-[50px]" // Increased width and height
@@ -85,10 +81,8 @@ function Marketplace() {
                   <option value="LE">LE</option>
                   <option value="EX">EX</option>
                   <option value="Lariat">Lariat</option>
-                  {/* Add more variant options here */}
                 </select>
               </div>
-              {/* Button - Search */}
               <button className="py-2 text-white mr-2 bg-blue-500 rounded w-[120px] h-[50px]">
                 Search
               </button>

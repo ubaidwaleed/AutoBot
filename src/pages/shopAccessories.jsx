@@ -44,7 +44,7 @@ const ShopAccessories = () => {
     setSelectedModel(e.target.value);
   };
 
-  const [priceRange, setPriceRange] = useState([0, 1000]); // Initial values, adjust as needed
+  const [priceRange, setPriceRange] = useState([0, 10000]); // Initial values, adjust as needed
 
   const handlePriceRangeChange = (value) => {
     setPriceRange(value);
@@ -98,15 +98,54 @@ const ShopAccessories = () => {
   }, [sortingOrder]);
 
   console.log(accessories);
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const resetFilters = () => {
+    setSelectedCategory("All");
+    setSelectedMake("All");
+    setSelectedModel("All");
+    setPriceRange([0, 10000]); // Reset price range
+    setSearchTerm(""); // Reset search term
+  };
+
   var filteredAccessories = [];
 
   if (accessories) {
-    filteredAccessories = accessories.filter(
-      (val) =>
-        (selectedCategory === "All" || val.subcategory === selectedCategory) &&
-        (selectedMake === "All" || val.brand === selectedMake) &&
-        (selectedModel === "All" || val.compatibility.includes(selectedModel))
-    );
+    const searchTerms = searchTerm.toLowerCase().split(" ");
+
+    filteredAccessories = accessories.filter((val) => {
+      const nameTenWords = val.name
+        .split(" ")
+        .slice(0, 20)
+        .join(" ")
+        .toLowerCase();
+
+      return (
+        (selectedCategory.toLowerCase() === "all" ||
+          val.subcategory.toLowerCase() === selectedCategory.toLowerCase()) &&
+        (selectedMake.toLowerCase() === "all" ||
+          val.brand.toLowerCase() === selectedMake.toLowerCase()) &&
+        (selectedModel.toLowerCase() === "all" ||
+          val.compatibility.some(
+            (item) => item.toLowerCase() === selectedModel.toLowerCase()
+          )) &&
+        val.price >= priceRange[0] &&
+        val.price <= priceRange[1] &&
+        searchTerms.every(
+          (term) =>
+            val.brand.toLowerCase().includes(term) ||
+            val.compatibility.some((compatibilityItem) =>
+              compatibilityItem.toLowerCase().includes(term)
+            ) ||
+            nameTenWords.includes(term) // Check if description's first ten words include search term
+        )
+      );
+    });
 
     console.log(filteredAccessories);
   }
@@ -120,7 +159,7 @@ const ShopAccessories = () => {
           <div className="relative">
             <div className="relative w-full h-[400px] ">
               <img
-                src="https://wallpapers.com/images/featured/carbon-fiber-11gbag3a3s3o1b3f.jpg"
+                src="src/assets/images/marketplace/carbon-fiber-background.jpg"
                 alt="Your Image"
                 className="object-cover w-full h-full bg-[#ffffff19] "
               />
@@ -141,7 +180,9 @@ const ShopAccessories = () => {
 
                       <input
                         type="text"
-                        placeholder="Search by name of part or accessory..."
+                        placeholder="Search by name, type, or brand..."
+                        value={searchTerm}
+                        onChange={handleSearch}
                         className="w-full px-8 py-3 text-sm bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
                       />
                     </div>
@@ -149,17 +190,17 @@ const ShopAccessories = () => {
                     <div className="flex items-center justify-between mt-4">
                       <p className="font-medium">Filters</p>
                       <div>
-                        <button className="px-4 py-2 mr-1 text-sm font-medium text-gray-800 bg-gray-100 rounded-md hover:bg-gray-200">
-                          Reset Filter
-                        </button>
-                        <button className="px-4 py-2 text-sm font-medium text-white rounded-md bg-[#1a79ff] hover:bg-[#1352a9] ml-2">
-                          Search
+                        <button
+                          onClick={resetFilters}
+                          className="px-4 py-2 text-sm font-medium text-white rounded-md bg-[#1a79ff] hover:bg-[#1352a9] ml-2"
+                        >
+                          Reset Filters
                         </button>
                       </div>
                     </div>
 
                     <div>
-                      <div className="grid grid-cols-2 gap-4 mt-4 md:grid-cols-3 xl:grid-cols-4">
+                      <div className="grid grid-cols-1 gap-4 mt-4 md:grid-cols-2 xl:grid-cols-3">
                         <select
                           className="w-full px-4 py-3 text-sm bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
                           value={selectedCategory}
@@ -193,21 +234,9 @@ const ShopAccessories = () => {
                           <option value="Alto">Alto</option>
                         </select>
 
-                        <select
-                          className="w-full px-4 py-3 text-sm bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
-                          defaultValue="" // Set an initial default value (empty string)
-                        >
-                          <option value="" disabled hidden>
-                            Select Variant
-                          </option>
-                          <option value="LE">LE</option>
-                          <option value="EX">EX</option>
-                          <option value="Lariat">Lariat</option>
-                        </select>
-
                         <PriceRangeSlider
                           min={0}
-                          max={1000}
+                          max={10000}
                           value={priceRange}
                           onChange={handlePriceRangeChange}
                         />

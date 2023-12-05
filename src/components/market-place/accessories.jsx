@@ -121,7 +121,7 @@ const Accessories = () => {
                   alt={accessory.name}
                 />
                 <p className="px-4 py-2 bg-[#1a79ff] font-medium inline-block text-sm product-name text-white">
-                  {accessory.name}
+                  {accessory.name.split(" ").slice(0, 2).join(" ")}
                 </p>
               </div>
               <div className="px-4 py-8 mt-2 text-black ">

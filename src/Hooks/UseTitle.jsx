@@ -5,7 +5,7 @@ const UseTitle = ({ title, colorTitle, subTitle, titleImg }) => {
         <h2 className="text-title">{title}</h2>
         <h2 className="text-[#1a79ff] text-title">{colorTitle}</h2>
       </div>
-      <p className="text-[#6c6c6c] font-medium">{subTitle}</p>
+      <p className="font-medium text-gray-400">{subTitle}</p>
       <img className="py-6" src={titleImg} alt="" />
     </div>
   );

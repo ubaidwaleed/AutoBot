@@ -15,6 +15,7 @@ import Cart from "./pages/cart";
 import Checkout from "./pages/checkout";
 import ShopAccessories from "./pages/shopAccessories";
 import ShopParts from "./pages/shopParts";
+import ShopInteriorExterior from "./pages/shopInteriorExterior";
 import { CartContextProvider } from "./context/cart-context/cartContext";
 import { useEffect } from "react";
 
@@ -48,6 +49,14 @@ function App() {
           ""
         )}
         {token ? <Route path="/shop-parts" element={<ShopParts />} /> : ""}
+        {token ? (
+          <Route
+            path="/shop-interiorexterior"
+            element={<ShopInteriorExterior />}
+          />
+        ) : (
+          ""
+        )}
         {token ? (
           <Route path="/single-product" element={<SingleProduct />} />
         ) : (
