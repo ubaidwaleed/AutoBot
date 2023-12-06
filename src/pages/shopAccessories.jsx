@@ -68,7 +68,7 @@ const ShopAccessories = () => {
           data.data.accessoriesdata &&
           data.data.accessoriesdata.length > 0
         ) {
-          setAccessories(data.data.accessoriesdata.slice(0, 5)); // Limiting to three items
+          setAccessories(data.data.accessoriesdata); // Limiting to three items
         }
       } catch (error) {
         console.error("Error fetching accessories:", error);

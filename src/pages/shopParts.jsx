@@ -68,7 +68,7 @@ const ShopParts = () => {
           data.data.partsdata &&
           data.data.partsdata.length > 0
         ) {
-          setParts(data.data.partsdata.slice(0, 5)); // Limiting to three items
+          setParts(data.data.partsdata); // Limiting to three items
           console.log("Parts data", parts);
         }
       } catch (error) {
