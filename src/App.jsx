@@ -19,6 +19,9 @@ import ShopInteriorExterior from "./pages/shopInteriorExterior";
 import { CartContextProvider } from "./context/cart-context/cartContext";
 import { useEffect } from "react";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   const [token, setToken] = useState(false);
 
@@ -35,6 +38,7 @@ function App() {
 
   return (
     <CartContextProvider>
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<Login setToken={setToken} />} />
         <Route path="/signup" element={<SignUp />} />

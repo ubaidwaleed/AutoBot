@@ -3,6 +3,7 @@ import logo1 from "../assets/images/autobot-logo1.png";
 import autobot1 from "../assets/images/autobot1.png";
 import { supabase } from "../supabase/client";
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 function Login({ setToken }) {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ function Login({ setToken }) {
     event.preventDefault();
 
     console.log("Form submitted with valid data:", formData);
+    const toastLogin = toast.loading("Logging in...", { autoClose: false });
 
     // Submitting to Supabase
     try {
@@ -35,15 +37,35 @@ function Login({ setToken }) {
       // Log the response from Supabase
       if (error) {
         console.error("Sign in error:", error);
-        alert("Error signing in. Please try again."); // Show an error message to the user
+        // alert("Error signing in. Please try again."); // Show an error message to the user
+        toast.update(toastLogin, {
+          type: toast.TYPE.ERROR,
+          render: "Error logging in. Please try again.",
+          autoClose: 5000, // Adjust the time or set it to 0 for manual close
+          isLoading: false,
+        });
       } else {
+        toast.update(toastLogin, {
+          type: toast.TYPE.SUCCESS,
+          render: "Logged in successfully!",
+          autoClose: 3000, // Adjust the time or set it to 0 for manual close
+          isLoading: false,
+        });
+
         console.log(data);
         setToken(data);
+
         navigate("/home");
       }
     } catch (error) {
       console.error("Caught an exception:", error);
-      alert("An error occurred. Please try again."); // Show an error message to the user
+      // alert("An error occurred. Please try again."); // Show an error message to the user
+      toast.update(toastLogin, {
+        type: toast.TYPE.ERROR,
+        render: "Error logging in. Please try again.",
+        autoClose: 5000, // Adjust the time or set it to 0 for manual close
+        isLoading: false,
+      });
     }
   };
 

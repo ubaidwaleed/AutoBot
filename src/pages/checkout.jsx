@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Modal from "react-modal";
 import { GiConfirmed } from "react-icons/gi";
+import { toast } from "react-toastify";
 
 const Checkout = ({ token }) => {
   const { cartSubTotal, cartItems, clearCart } = useContext(CartContext);
@@ -101,21 +102,14 @@ const Checkout = ({ token }) => {
   };
 
   const handlePlaceOrder = () => {
-    // const isEmptyField = Object.values(shippingAddress).some(
-    //   (field) => field === ""
-    // );
-
-    // if (isEmptyField) {
-    //   // If any field is empty, prevent placing the order
-    //   alert("Please fill in all fields before placing the order.");
-    //   return;
-    // }
-
     const hasErrors = validateForm();
 
     if (!hasErrors) {
       // Mock URL for the API endpoint
       const apiUrl = "http://localhost:3000/createorder";
+      const toastOrder = toast.loading("Processing order...", {
+        autoClose: false,
+      });
 
       fetch(apiUrl, {
         method: "POST",
@@ -132,21 +126,36 @@ const Checkout = ({ token }) => {
         })
         .then((data) => {
           // Handle the response from the server
+
+          toast.update(toastOrder, {
+            type: toast.TYPE.SUCCESS,
+            render: "Order placed successfully!",
+            autoClose: 3000,
+            isLoading: false,
+          });
           console.log("Order:", payload);
 
           console.log("Order placed:", data);
+          clearCart();
           setShowModal(true);
         })
         .catch((error) => {
           // Handle errors
           console.error("There was a problem placing the order:", error);
+
+          toast.update(toastOrder, {
+            type: toast.TYPE.ERROR,
+            render: "Error placing order. Please try again.",
+            autoClose: 5000, // Adjust the time or set it to 0 for manual close
+            isLoading: false,
+          });
         });
     }
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
-    clearCart();
+    // clearCart();
   };
 
   return (

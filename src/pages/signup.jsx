@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-
 import logo1 from "../assets/images/autobot-logo1.png";
 import autobot1 from "../assets/images/autobot1.png";
 import { useState } from "react";
 import { supabase } from "../supabase/client";
+import { toast } from "react-toastify";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -29,6 +29,8 @@ function SignUp() {
     event.preventDefault();
     const { password, confirmPassword } = formData;
 
+    const toastSignup = toast.loading("Signing up...", { autoClose: false });
+
     if (password === confirmPassword) {
       // Passwords match, proceed with form submission
       setPasswordsMatch(true);
@@ -49,10 +51,25 @@ function SignUp() {
         // Log the response from Supabase
         if (error) {
           console.error("Sign up error:", error);
-          alert("Error signing up. Please try again."); // Show an error message to the user
+          // alert("Error signing up. Please try again."); // Show an error message to the user
+          toast.update(toastSignup, {
+            type: toast.TYPE.ERROR,
+            render: "Error signing up. Please try again.",
+            autoClose: 5000, // Adjust the time or set it to 0 for manual close
+            isLoading: false,
+          });
         } else {
           console.log("Sign up successful. Response data:", data);
-          alert("Check your email for verification link");
+          // alert("Check your email for verification link");
+
+          toast.update(toastSignup, {
+            type: toast.TYPE.SUCCESS,
+            render:
+              "Sign up successfully! Check your email for verification link.",
+            autoClose: 10000, // Adjust the time or set it to 0 for manual close
+            isLoading: false,
+          });
+
           setFormData({
             email: "",
             password: "",
@@ -62,7 +79,13 @@ function SignUp() {
         }
       } catch (error) {
         console.error("Caught an exception:", error);
-        alert("An error occurred. Please try again."); // Show an error message to the user
+        // alert("An error occurred. Please try again."); // Show an error message to the user
+        toast.update(toastSignup, {
+          type: toast.TYPE.ERROR,
+          render: "Error signing up. Please try again.",
+          autoClose: 5000, // Adjust the time or set it to 0 for manual close
+          isLoading: false,
+        });
       }
     } else {
       // Passwords don't match, indicate the error
