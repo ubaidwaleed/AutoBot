@@ -20,7 +20,7 @@ import { CartContextProvider } from "./context/cart-context/cartContext";
 import { useEffect } from "react";
 import UpdatePassword from "./pages/update-password";
 import ShopCarCareProducts from "./pages/shopCareCareProducts";
-
+import Page404 from "./pages/page404";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -47,23 +47,43 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/update-password" element={<UpdatePassword />} />
 
-        {token ? <Route path={"/home"} element={<Home token={token} />} /> : ""}
-        {token ? <Route path="/marketplace" element={<Marketplace />} /> : ""}
-        {token ? <Route path="/autobot" element={<AutoBot />} /> : ""}
-        {token ? <Route path="/shop" element={<Shop />} /> : ""}
+        {token ? (
+          <Route path={"/home"} element={<Home token={token} />} />
+        ) : (
+          <Route path="/home" element={<Page404 />} />
+        )}
+        {token ? (
+          <Route path="/marketplace" element={<Marketplace />} />
+        ) : (
+          <Route path="/marketplace" element={<Page404 />} />
+        )}
+        {token ? (
+          <Route path="/autobot" element={<AutoBot />} />
+        ) : (
+          <Route path="/autobot" element={<Page404 />} />
+        )}
+        {token ? (
+          <Route path="/shop" element={<Shop />} />
+        ) : (
+          <Route path="/shop" element={<Page404 />} />
+        )}
         {token ? (
           <Route path="/shop-accessories" element={<ShopAccessories />} />
         ) : (
-          ""
+          <Route path="/shop-accessories" element={<Page404 />} />
         )}
-        {token ? <Route path="/shop-parts" element={<ShopParts />} /> : ""}
+        {token ? (
+          <Route path="/shop-parts" element={<ShopParts />} />
+        ) : (
+          <Route path="/shop-parts" element={<Page404 />} />
+        )}
         {token ? (
           <Route
             path="/shop-carcareproducts"
             element={<ShopCarCareProducts />}
           />
         ) : (
-          ""
+          <Route path="/shop-carcareproduct" element={<Page404 />} />
         )}
         {token ? (
           <Route
@@ -71,18 +91,22 @@ function App() {
             element={<ShopInteriorExterior />}
           />
         ) : (
-          ""
+          <Route path="/shop-interiorexterior" element={<Page404 />} />
         )}
         {token ? (
           <Route path="/single-product" element={<SingleProduct />} />
         ) : (
-          ""
+          <Route path="/single-product" element={<Page404 />} />
         )}
-        {token ? <Route path="/cart" element={<Cart />} /> : ""}
+        {token ? (
+          <Route path="/cart" element={<Cart />} />
+        ) : (
+          <Route path="/cart" element={<Page404 />} />
+        )}
         {token ? (
           <Route path="/checkout" element={<Checkout token={token} />} />
         ) : (
-          ""
+          <Route path="/checkout" element={<Page404 />} />
         )}
       </Routes>
     </CartContextProvider>
