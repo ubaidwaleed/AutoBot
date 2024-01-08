@@ -18,6 +18,8 @@ import ShopParts from "./pages/shopParts";
 import ShopInteriorExterior from "./pages/shopInteriorExterior";
 import { CartContextProvider } from "./context/cart-context/cartContext";
 import { useEffect } from "react";
+import UpdatePassword from "./pages/update-password";
+import ShopCarCareProducts from "./pages/shopCareCareProducts";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -43,6 +45,8 @@ function App() {
         <Route path="/" element={<Login setToken={setToken} />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/update-password" element={<UpdatePassword />} />
+
         {token ? <Route path={"/home"} element={<Home token={token} />} /> : ""}
         {token ? <Route path="/marketplace" element={<Marketplace />} /> : ""}
         {token ? <Route path="/autobot" element={<AutoBot />} /> : ""}
@@ -53,6 +57,14 @@ function App() {
           ""
         )}
         {token ? <Route path="/shop-parts" element={<ShopParts />} /> : ""}
+        {token ? (
+          <Route
+            path="/shop-carcareproducts"
+            element={<ShopCarCareProducts />}
+          />
+        ) : (
+          ""
+        )}
         {token ? (
           <Route
             path="/shop-interiorexterior"

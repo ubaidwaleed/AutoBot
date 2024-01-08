@@ -20,8 +20,15 @@ const Checkout = ({ token }) => {
   const [zip_code, setZipCode] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [emailError, setEmailError] = useState("");
 
   const [shippingPrice, setShippingPrice] = useState(300);
+
+  const isValidEmail = (email) => {
+    // Regular expression for basic email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const [shippingAddress, setShippingAddress] = useState({
     firstname: "",
@@ -103,6 +110,11 @@ const Checkout = ({ token }) => {
 
   const handlePlaceOrder = () => {
     const hasErrors = validateForm();
+
+    if (!isValidEmail(email)) {
+      setEmailError("Please enter a valid email address");
+      return; // Prevent order placement if email is invalid
+    }
 
     if (!hasErrors) {
       // Mock URL for the API endpoint
@@ -567,7 +579,15 @@ const Checkout = ({ token }) => {
                   className="w-full px-4 py-3 text-sm border border-gray-200 rounded-md shadow-sm outline-none pl-11 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                   placeholder="your.email@gmail.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    const inputEmail = e.target.value;
+                    setEmail(inputEmail);
+                    if (!isValidEmail(inputEmail)) {
+                      setEmailError("Please enter a valid email address");
+                    } else {
+                      setEmailError("");
+                    }
+                  }}
                 />
                 <div className="absolute inset-y-0 left-0 inline-flex items-center px-3 pointer-events-none">
                   <svg
@@ -620,86 +640,6 @@ const Checkout = ({ token }) => {
                 </div>
               </div>
 
-              {/* <label
-              for="card-no"
-              className="block mt-4 mb-2 text-sm font-medium"
-            >
-              Card Details
-            </label>
-            <div className="flex">
-              <div className="relative flex-shrink-0 w-7/12">
-                <input
-                  type="text"
-                  id="card-no"
-                  name="card-no"
-                  className="w-full px-2 py-3 text-sm border border-gray-200 rounded-md shadow-sm outline-none pl-11 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                  placeholder="xxxx-xxxx-xxxx-xxxx"
-                />
-                <div className="absolute inset-y-0 left-0 inline-flex items-center px-3 pointer-events-none">
-                  <svg
-                    className="w-4 h-4 text-gray-400"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M11 5.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1z" />
-                    <path d="M2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2zm13 2v5H1V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm-1 9H2a1 1 0 0 1-1-1v-1h14v1a1 1 0 0 1-1 1z" />
-                  </svg>
-                </div>
-              </div>
-              <input
-                type="text"
-                name="credit-expiry"
-                className="w-full px-2 py-3 text-sm border border-gray-200 rounded-md shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                placeholder="MM/YY"
-              />
-              <input
-                type="text"
-                name="credit-cvc"
-                className="flex-shrink-0 w-1/6 px-2 py-3 text-sm border border-gray-200 rounded-md shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                placeholder="CVC"
-              />
-            </div>
-            <label
-              for="billing-address"
-              className="block mt-4 mb-2 text-sm font-medium"
-            >
-              Billing Address
-            </label>
-            <div className="flex flex-col sm:flex-row">
-              <div className="relative flex-shrink-0 sm:w-7/12">
-                <input
-                  type="text"
-                  id="billing-address"
-                  name="billing-address"
-                  className="w-full px-4 py-3 text-sm border border-gray-200 rounded-md shadow-sm outline-none pl-11 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                  placeholder="Street Address"
-                />
-                <div className="absolute inset-y-0 left-0 inline-flex items-center px-3 pointer-events-none">
-                  <img
-                    className="object-contain w-4 h-4"
-                    src="https://flagpack.xyz/_nuxt/4c829b6c0131de7162790d2f897a90fd.svg"
-                    alt=""
-                  />
-                </div>
-              </div>
-              <select
-                type="text"
-                name="billing-state"
-                className="w-full px-4 py-3 text-sm border border-gray-200 rounded-md shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-              >
-                <option value="State">State</option>
-              </select>
-              <input
-                type="text"
-                name="billing-zip"
-                className="flex-shrink-0 px-4 py-3 text-sm border border-gray-200 rounded-md shadow-sm outline-none sm:w-1/6 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                placeholder="ZIP"
-              />
-            </div> */}
-
               <div className="py-2 mt-6 border-t border-b">
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-medium text-gray-900">Subtotal</p>
@@ -723,6 +663,7 @@ const Checkout = ({ token }) => {
               {Object.keys(formErrors).some((key) => formErrors[key]) && (
                 <p>Please fill in all fields before placing the order.</p>
               )}
+              {emailError && <p className="text-red-500">{emailError}</p>}
             </div>
             <button
               className="w-full px-6 py-3 mt-4 mb-8 font-medium text-white bg-gray-900 rounded-md"

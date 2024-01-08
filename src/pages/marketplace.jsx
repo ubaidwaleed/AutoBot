@@ -37,16 +37,16 @@ function Marketplace() {
               />
               <div className="absolute inset-0 bg-black opacity-70"></div>
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="absolute text-6xl text-center text-white transform -translate-y-1/2 top-[160px] hidden sm:block">
+                <div className="absolute text-7xl text-center text-white transform -translate-y-1/2 top-[220px] hidden sm:block">
                   Find Parts For Your Vehicle
                 </div>
-                <div className="absolute text-2xl text-center text-white transform -translate-y-1/2 top-[220px] hidden sm:block">
+                <div className="absolute text-3xl text-center text-white transform -translate-y-1/2 top-[290px] hidden sm:block">
                   Over hundreds of brands and tens of thousands of parts
                 </div>
               </div>
             </div>
 
-            <div className="absolute flex flex-col items-center space-y-2 transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 sm:flex-row sm:space-x-2">
+            {/* <div className="absolute flex flex-col items-center space-y-2 transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 sm:flex-row sm:space-x-2">
               <div className="relative">
                 <select
                   className="mt-3 p-3 m-1 bg-white border border-gray-300 rounded w-[320px] h-[50px]" // Increased width and height
@@ -86,7 +86,7 @@ function Marketplace() {
               <button className="py-2 text-white mr-2 bg-blue-500 rounded w-[120px] h-[50px]">
                 Search
               </button>
-            </div>
+            </div> */}
           </div>
           {/* ...................features............. */}
           <div className="relative flex justify-center w-full">

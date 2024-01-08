@@ -27,12 +27,13 @@ function SignUp() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const { password, confirmPassword } = formData;
 
-    const toastSignup = toast.loading("Signing up...", { autoClose: false });
+    const { password, confirmPassword } = formData;
 
     if (password === confirmPassword) {
       // Passwords match, proceed with form submission
+      const toastSignup = toast.loading("Signing up...", { autoClose: false });
+
       setPasswordsMatch(true);
       console.log("Form submitted with valid data:", formData);
 

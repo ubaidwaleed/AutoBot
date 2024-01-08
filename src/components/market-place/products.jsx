@@ -24,7 +24,7 @@ const products = [
   {
     title: "Vehicle Care Products",
     image_url: "src/assets/images/marketplace/auto-cleaning.jpg",
-    to: "/shop-accessories",
+    to: "/shop-carcareproducts",
   },
   {
     title: "Interior/Exterior",

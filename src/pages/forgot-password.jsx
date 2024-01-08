@@ -1,9 +1,63 @@
 import { useNavigate } from "react-router-dom";
 import logo1 from "../assets/images/autobot-logo1.png";
 import autobot1 from "../assets/images/autobot1.png";
+import { useState } from "react";
+import { supabase } from "../supabase/client";
+import { toast } from "react-toastify";
 
 function ForgotPassword() {
   const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+
+  // Function to handle changes in the email input
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  // Function to handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const toastForgotPassword = toast.loading(
+      "Sending password reset email...",
+      {
+        autoClose: false,
+      }
+    );
+
+    try {
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + "/update-password", // Replace with your redirect URL
+      });
+      if (error) {
+        console.error("Error resetting password:", error.message);
+        toast.update(toastForgotPassword, {
+          type: toast.TYPE.ERROR,
+          render: "Error sending password reset email. Please try again.",
+          autoClose: 3000, // Adjust the time or set it to 0 for manual close
+          isLoading: false,
+        });
+      } else {
+        console.log("Password reset link sent to", email);
+        console.log("Response data:", data);
+        toast.update(toastForgotPassword, {
+          type: toast.TYPE.SUCCESS,
+          render: "Password reset link sent successfully! Check your email.",
+          autoClose: 5000, // Adjust the time or set it to 0 for manual close
+          isLoading: false,
+        });
+      }
+    } catch (error) {
+      console.error("Error resetting password:", error.message);
+      toast.update(toastForgotPassword, {
+        type: toast.TYPE.ERROR,
+        render: "Error sending password reset email. Please try again.",
+        autoClose: 3000, // Adjust the time or set it to 0 for manual close
+        isLoading: false,
+      });
+    }
+  };
+
   return (
     <>
       <section className="flex flex-col items-center h-screen md:flex-row">
@@ -20,15 +74,17 @@ function ForgotPassword() {
               Password Recovery
             </h1>
 
-            <form className="mt-6" action="#" method="POST">
+            <form className="mt-6" onSubmit={handleSubmit}>
               <div>
                 <label className="block text-gray-700">Email Address</label>
                 <input
                   type="email"
-                  name="email" // Provide a name attribute for the email input
-                  id="email" // Provide a unique id for the email input
+                  name="email"
+                  id="email"
                   placeholder="Enter Email Address"
                   className="w-full px-4 py-3 mt-2 bg-gray-200 border rounded-lg focus:border-blue-500 focus:bg-white focus:outline-none"
+                  value={email} // Set the value of the input to the 'email' state
+                  onChange={handleEmailChange} // Handle changes in the input
                   required
                 />
               </div>
@@ -60,12 +116,6 @@ function ForgotPassword() {
             alt="Logo2"
             className="object-cover w-full h-full"
           />
-          {/* <div className="absolute top-0 left-0 w-full h-full bg-gray-500 bg-opacity-30">
-            <div className="absolute text-center text-white transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-              <img src={logo2}></img>
-              <h1 className="mt-4 text-xl">Transforming car commerce online</h1>
-            </div>
-          </div> */}
         </div>
       </section>
     </>
