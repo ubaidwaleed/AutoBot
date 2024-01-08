@@ -13,6 +13,8 @@ import { FaShopify } from "react-icons/fa";
 import { useContext } from "react";
 import CartContext from "../context/cart-context/cartContext";
 import { TbLogout2 } from "react-icons/tb";
+import { Link } from "react-router-dom";
+import { FaUser } from "react-icons/fa";
 
 const SidebarIcon = ({ icon, text = "tooltip", onClick }) => (
   <div className="sidebar-icon group" onClick={onClick}>
@@ -27,6 +29,8 @@ const SidebarLine = () => (
 const UserMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const buttonRef = useRef(null);
+
+  const storedToken = JSON.parse(sessionStorage.getItem("token"));
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -49,48 +53,39 @@ const UserMenu = () => {
   return (
     <div className="flex justify-center">
       <div className="relative inline-block" ref={buttonRef}>
-        <div
+        {/* <div
           className="relative flex cursor-pointer items-center w-12 h-12 p-[2px] bg-white rounded-full focus:border-blue-500 focus:ring-opacity-40 dark:focus:ring-opacity-40 focus:ring-blue-300 dark:focus:ring-blue-400 focus:ring text-gray-900 dark:text-white dark:bg-gray-100 focus:outline-none"
           onClick={toggleMenu}
         >
-          <img
-            className="object-cover w-full h-full border-0 rounded-full"
-            src="https://images.unsplash.com/photo-1523779917675-b6ed3a42a561?ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8d29tYW4lMjBibHVlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=face&w=500&q=200"
-            alt="User Avatar"
-          />
-        </div>
+          <FaUser className="object-cover w-full h-full border-0 rounded-full bg-slate-500" />
+        </div> */}
+        <SidebarIcon
+          icon={<FaUser size="28" />}
+          text="Open user menu"
+          onClick={toggleMenu}
+        />
 
         {isMenuOpen && (
           <div className="absolute left-0 w-56 py-2 mt-2 overflow-hidden bg-white rounded-md shadow-xl bottom-12 dark:bg-gray-100">
-            <a
-              href="#"
-              className="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-200 transform group dark:text-gray-300 hover:bg-blue-600 dark:hover:bg-blue-600"
-            >
-              <img
-                className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9 group-hover:filter group-hover:grayscale-100"
-                src="https://images.unsplash.com/photo-1523779917675-b6ed3a42a561?ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8d29tYW4lMjBibHVlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=face&w=500&q=200"
-                alt="jane avatar"
-              />
+            <a className="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-200">
               <div className="mx-1">
-                <h1 className="text-sm font-semibold text-gray-700 dark:text-gray-900 group-hover:text-white">
-                  Jane Doe
+                <h1 className="text-sm font-semibold text-gray-700 ">
+                  {storedToken.user.user_metadata.full_name}
                 </h1>
-                <p className="text-sm text-gray-600 dark:text-gray-600 group-hover:text-white">
-                  <a href="#" className="hover:text-white">
-                    janedoe@example.com
-                  </a>
+                <p className="text-sm text-gray-600 ">
+                  <a>{storedToken.user.email}</a>
                 </p>
               </div>
             </a>
 
             <hr className="border-gray-400 dark:border-gray-400" />
 
-            <a
-              href="#"
+            <Link
+              to="/home"
               className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-900 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white"
             >
               View profile
-            </a>
+            </Link>
 
             <a
               href="#"
@@ -99,9 +94,9 @@ const UserMenu = () => {
               Settings
             </a>
 
-            <hr className="border-gray-400 dark:border-gray-400" />
+            {/* <hr className="border-gray-400 dark:border-gray-400" /> */}
 
-            <a
+            {/* <a
               href="#"
               className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-900 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white"
             >
@@ -112,7 +107,7 @@ const UserMenu = () => {
               className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-900 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white"
             >
               Sign Out
-            </a>
+            </a> */}
           </div>
         )}
       </div>
@@ -122,8 +117,6 @@ const UserMenu = () => {
 
 const Sidebar = () => {
   const navigate = useNavigate();
-
-  const token = JSON.parse(sessionStorage.getItem("token"));
 
   function handleLogout() {
     clearCart();
@@ -142,11 +135,11 @@ const Sidebar = () => {
         onClick={() => navigate("/home")}
       />
       <SidebarLine />
-      <SidebarIcon icon={<BsPlus size="28" />} text="Add a new Server" />
+      {/* <SidebarIcon icon={<BsPlus size="28" />} text="Add a new Server" />
       <SidebarIcon
         icon={<BsFillLightningFill size="28" />}
         text="Upgrade to Pro"
-      />
+      /> */}
       <SidebarIcon
         icon={<AiOutlineRobot size="28" />}
         text="Need help from AutoBot ?"
@@ -176,8 +169,8 @@ const Sidebar = () => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              zIndex: "1",
             }}
+            className="z-10"
           >
             {cartItems.length}
           </div>
@@ -192,7 +185,9 @@ const Sidebar = () => {
       </div>
 
       <SidebarLine />
-      <UserMenu />
+      <div className="z-50">
+        <UserMenu />
+      </div>
 
       <SidebarIcon
         icon={<TbLogout2 size="28" />}

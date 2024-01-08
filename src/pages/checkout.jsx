@@ -22,6 +22,12 @@ const Checkout = ({ token }) => {
   const [phone, setPhone] = useState("");
   const [emailError, setEmailError] = useState("");
 
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("COD");
+
+  const handlePaymentMethodChange = (method) => {
+    setSelectedPaymentMethod(method);
+  };
+
   const [shippingPrice, setShippingPrice] = useState(300);
 
   const isValidEmail = (email) => {
@@ -175,86 +181,6 @@ const Checkout = ({ token }) => {
       {" "}
       <Sidebar />
       <div className="relative mb-16 ml-16">
-        {" "}
-        {/* <div className="flex flex-col items-center py-4 bg-white border-b sm:flex-row sm:px-10 lg:px-20 xl:px-32">
-          <a href="#" className="text-2xl font-bold text-gray-800">
-            sneekpeeks
-          </a>
-          <div className="py-2 mt-4 text-xs sm:mt-0 sm:ml-auto sm:text-base">
-            <div className="relative">
-              <ul className="relative flex items-center justify-between w-full space-x-2 sm:space-x-4">
-                <li className="flex items-center space-x-3 text-left sm:space-x-4">
-                  <a
-                    className="flex items-center justify-center w-6 h-6 text-xs font-semibold rounded-full bg-emerald-200 text-emerald-700"
-                    href="#"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-4 h-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </a>
-                  <span className="font-semibold text-gray-900">Shop</span>
-                </li>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-                <li className="flex items-center space-x-3 text-left sm:space-x-4">
-                  <a
-                    className="flex items-center justify-center w-6 h-6 text-xs font-semibold text-white bg-gray-600 rounded-full ring ring-gray-600 ring-offset-2"
-                    href="#"
-                  >
-                    2
-                  </a>
-                  <span className="font-semibold text-gray-900">Shipping</span>
-                </li>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-                <li className="flex items-center space-x-3 text-left sm:space-x-4">
-                  <a
-                    className="flex items-center justify-center w-6 h-6 text-xs font-semibold text-white bg-gray-400 rounded-full"
-                    href="#"
-                  >
-                    3
-                  </a>
-                  <span className="font-semibold text-gray-500">Payment</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div> */}
         <div className="grid mt-16 sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
           <div className="px-4 pt-8">
             <p className="text-xl font-medium">Order Summary</p>
@@ -306,7 +232,8 @@ const Checkout = ({ token }) => {
                   id="radio_1"
                   type="radio"
                   name="radio"
-                  checked
+                  checked={selectedPaymentMethod === "COD"}
+                  onChange={() => handlePaymentMethodChange("COD")}
                 />
                 <span className="box-content absolute block w-3 h-3 -translate-y-1/2 bg-white border-8 border-gray-300 rounded-full peer-checked:border-gray-700 right-4 top-1/2"></span>
                 <label
@@ -347,7 +274,8 @@ const Checkout = ({ token }) => {
                   id="radio_2"
                   type="radio"
                   name="radio"
-                  checked
+                  checked={selectedPaymentMethod === "BankTransfer"}
+                  onChange={() => handlePaymentMethodChange("BankTransfer")}
                 />
                 <span className="box-content absolute block w-3 h-3 -translate-y-1/2 bg-white border-8 border-gray-300 rounded-full peer-checked:border-gray-700 right-4 top-1/2"></span>
                 <label
@@ -372,9 +300,9 @@ const Checkout = ({ token }) => {
                   </svg>
 
                   <div className="ml-5">
-                    <span className="mt-2 font-semibold">Online payment</span>
+                    <span className="mt-2 font-semibold">Bank Transfer</span>
                     <p className="text-sm leading-6 text-slate-500">
-                      Payment via Card
+                      Payment via Bank Transfer
                     </p>
                   </div>
                 </label>
@@ -685,17 +613,21 @@ const Checkout = ({ token }) => {
           backgroundColor: "rgba(0, 0, 0, 0.5)",
         }}
       >
-        <div className="p-12 bg-white rounded-lg shadow-2xl">
-          <h1 className="flex items-center justify-center text-4xl font-bold">
+        <div className="p-8 bg-white rounded-lg shadow-lg">
+          <h1 className="flex items-center justify-center text-4xl font-bold text-gray-800">
             Order Confirmed
             <GiConfirmed className="ml-2 text-4xl text-green-500" />{" "}
             {/* Change icon color to green */}
           </h1>
-          <div className="mt-4">
+          <p className="mt-4 text-xl text-center text-gray-700">
+            Thank you for your order!
+            <br /> Check your inbox for a confirmation email.
+          </p>
+          <div className="flex justify-center mt-6">
             <Link
               to="/marketplace"
-              className="block w-full px-4 py-2 mt-8 text-center text-white transition duration-300 bg-blue-500 rounded-md hover:bg-blue-600"
               onClick={handleCloseModal}
+              className="px-4 py-2 text-lg font-semibold text-white transition duration-300 bg-blue-500 rounded-md hover:bg-blue-600"
             >
               Close
             </Link>

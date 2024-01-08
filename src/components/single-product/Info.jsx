@@ -1,11 +1,10 @@
-// import { ReactComponent as Minus } from "../../assets/icon-minus.svg";
-// import { ReactComponent as Plus } from "../../assets/icon-plus.svg";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { FaCartPlus } from "react-icons/fa";
 import { useState } from "react";
 import { useContext } from "react";
 import CartContext from "../../context/cart-context/cartContext";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 const Info = ({
   Cart,
@@ -16,7 +15,7 @@ const Info = ({
   receivedProductData,
 }) => {
   const [error, setError] = useState("");
-  const [selectedQuantity, setSelectedQuantity] = useState(0);
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [calculatedPrice, setCalculatedPrice] = useState(0);
 
   // getting the context
@@ -34,19 +33,6 @@ const Info = ({
     }
   };
 
-  // const handleAddToCart = () => {
-  //   const calculatedPrice = receivedProductData?.price * selectedQuantity;
-
-  //   const cartItem = {
-  //     product: receivedProductData,
-  //     quantity: selectedQuantity,
-  //     calculatedPrice: calculatedPrice,
-  //   };
-
-  //   addToCart(cartItem);
-  //   console.log(cartItem);
-  // };
-
   const handleAddToCart = () => {
     // Check if the item with the same ID exists in cartItems
     const isItemInCart = cartItems.find(
@@ -54,7 +40,10 @@ const Info = ({
         (item.product.part_id &&
           item.product.part_id === receivedProductData.part_id) ||
         (item.product.accessory_id &&
-          item.product.accessory_id === receivedProductData.accessory_id)
+          item.product.accessory_id === receivedProductData.accessory_id) ||
+        (item.product.carcareproduct_id &&
+          item.product.carcareproduct_id ===
+            receivedProductData.carcareproduct_id)
     );
 
     if (isItemInCart) {
@@ -71,6 +60,11 @@ const Info = ({
     };
 
     addToCart(cartItem);
+
+    toast.info("Item added to cart", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 2000, // Duration for which the toast will be displayed (in milliseconds)
+    });
     console.log(cartItem);
   };
 
@@ -97,13 +91,8 @@ const Info = ({
               <span className="text-3xl font-bold titles">
                 ${receivedProductData?.price}
               </span>
-              {/* <span className="w-12 font-bold text-center rounded-md small-text discount">
-                20%
-              </span> */}
             </div>
-            {/* <del className="font-bold before-price md:hidden mr-9">$250.00</del> */}
           </div>
-          {/* <del className="hidden font-bold before-price md:block">$250.00</del> */}
         </div>
         <div className="relative flex flex-col items-center h-32 gap-4 mt-10 md:flex-row md:h-auto">
           <div className="flex items-center justify-between w-4/5 p-2 md:w-32 qty-btn rounded-xl">

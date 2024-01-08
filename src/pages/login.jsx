@@ -40,7 +40,7 @@ function Login({ setToken }) {
         // alert("Error signing in. Please try again."); // Show an error message to the user
         toast.update(toastLogin, {
           type: toast.TYPE.ERROR,
-          render: "Error logging in. Please try again.",
+          render: error.message,
           autoClose: 5000, // Adjust the time or set it to 0 for manual close
           isLoading: false,
         });
