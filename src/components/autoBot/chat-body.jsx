@@ -12,30 +12,30 @@ const civic = [
     imgUrl: civic1,
     name: "Civic",
     title: "Civic",
-    price: 25000,
+    price: "5.5 Million",
     description:
       "A popular compact car known for its fuel efficiency and reliability.",
-    link: "https://www.pakwheels.com/",
+    link: "https://www.pakwheels.com/used-cars/honda-civic-2019-for-sale-in-lahore-8220649",
   },
   {
     id: 2,
     imgUrl: civic2,
     name: "Civic",
     title: "Civic",
-    price: 27000,
+    price: "8.0 Million",
     description:
       "A sportier version of the classic Civic with enhanced performance features.",
-    link: "https://www.pakwheels.com/",
+    link: "https://www.pakwheels.com/used-cars/honda-civic-2022-for-sale-in-islamabad-8265116",
   },
   {
     id: 3,
     imgUrl: civic3,
     name: "Civic",
     title: "Civic",
-    price: 23000,
+    price: "8.5 Million",
     description:
       "A budget-friendly option that offers great value and practicality.",
-    link: "https://www.pakwheels.com/",
+    link: "https://www.pakwheels.com/used-cars/honda-civic-2022-for-sale-in-lahore-8166375",
   },
 ];
 

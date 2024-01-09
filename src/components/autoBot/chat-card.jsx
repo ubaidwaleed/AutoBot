@@ -15,7 +15,7 @@ export default function ChatCard({
         <p className="text-base text-gray-700">{description}</p>
       </div>
       <div className="flex items-center justify-between px-6 py-4">
-        <span className="text-xl font-bold text-gray-800">${price}</span>
+        <span className="text-xl font-bold text-gray-800">Rs {price}</span>
         <a
           href={link}
           target="_blank"
