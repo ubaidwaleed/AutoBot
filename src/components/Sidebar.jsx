@@ -87,12 +87,12 @@ const UserMenu = () => {
               View profile
             </Link>
 
-            <a
-              href="#"
+            <Link
+              to="/home"
               className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-900 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white"
             >
               Settings
-            </a>
+            </Link>
 
             {/* <hr className="border-gray-400 dark:border-gray-400" /> */}
 
