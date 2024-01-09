@@ -40,7 +40,7 @@ const CarCareProducts = () => {
   }, []);
 
   const handleShopNowClick = () => {
-    navigate("/shop-accessories"); // Redirects to the "/shop" route
+    navigate("/shop-carcareproducts"); // Redirects to the "/shop" route
   };
 
   const handleAccessoryClick = (clickedProduct) => {
