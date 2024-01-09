@@ -136,7 +136,7 @@ const Parts = () => {
                 </h2>
                 {/* Rest of your code */}
                 <div className="flex items-center justify-between pt-2 text-[#1a79ff] font-bold">
-                  <p>${part.price}</p>
+                  <p>Rs. {part.price}</p>
                   <div className="shopping-icon rounded-3xl">
                     <p className="px-2 py-2 duration-300 cursor-pointer ">
                       <AiOutlineShoppingCart className="w-6 h-6" />

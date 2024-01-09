@@ -10,7 +10,7 @@ const PriceRangeSlider = ({ min, max, value, onChange }) => {
     <div className="mt-4 w-96">
       <div className="flex items-center justify-between">
         <p className="font-medium">Price Range</p>
-        <p>{`$${value[0]} - $${value[1]}`}</p>
+        <p>{`Rs. ${value[0]} - Rs. ${value[1]}`}</p>
       </div>
       <Slider
         range
@@ -44,7 +44,7 @@ const ShopCarCareProducts = () => {
     setSelectedModel(e.target.value);
   };
 
-  const [priceRange, setPriceRange] = useState([0, 10000]); // Initial values, adjust as needed
+  const [priceRange, setPriceRange] = useState([0, 100000]); // Initial values, adjust as needed
 
   const handlePriceRangeChange = (value) => {
     setPriceRange(value);
@@ -112,7 +112,7 @@ const ShopCarCareProducts = () => {
     setSelectedCategory("All");
     setSelectedMake("All");
     setSelectedModel("All");
-    setPriceRange([0, 10000]); // Reset price range
+    setPriceRange([0, 100000]); // Reset price range
     setSearchTerm(""); // Reset search term
   };
 
@@ -160,7 +160,7 @@ const ShopCarCareProducts = () => {
           <Sidebar />
           {/* ...................image with dropdowns............. */}
           <div className="relative">
-            <div className="relative w-full h-[400px] ">
+            <div className="relative w-full h-[550px] lg:h-[430px]">
               <img
                 src="src/assets/images/marketplace/carbon-fiber-background.jpg"
                 alt="Your Image"
@@ -210,8 +210,29 @@ const ShopCarCareProducts = () => {
                           onChange={handleCategoryChange}
                         >
                           <option value="All">Select a Category</option>
-                          <option value="Interior">Interior</option>
-                          <option value="Exterior">Exterior</option>
+                          {carCareProducts.map((part) => {
+                            // Convert all categories to lowercase for comparison
+                            const categoryLowerCase =
+                              part.subcategory.toLowerCase();
+
+                            // Check if any lowercase version of the category already exists in the rendered options
+                            const isDuplicate =
+                              carCareProducts
+                                .map((p) => p.subcategory.toLowerCase())
+                                .indexOf(categoryLowerCase) !==
+                              carCareProducts.indexOf(part);
+
+                            // Render the option only if it's not a duplicate
+                            if (!isDuplicate) {
+                              return (
+                                <option key={part.id} value={part.subcategory}>
+                                  {part.subcategory}
+                                </option>
+                              );
+                            }
+
+                            return null; // Return null for duplicates to skip rendering
+                          })}
                         </select>
 
                         <select
@@ -220,9 +241,28 @@ const ShopCarCareProducts = () => {
                           onChange={handleMakeChange}
                         >
                           <option value="All">Select Make</option>
-                          <option value="Toyota">Toyota</option>
-                          <option value="Honda">Honda</option>
-                          <option value="Suzuki">Suzuki</option>
+                          {carCareProducts.map((part) => {
+                            // Convert all categories to lowercase for comparison
+                            const categoryLowerCase = part.brand.toLowerCase();
+
+                            // Check if any lowercase version of the category already exists in the rendered options
+                            const isDuplicate =
+                              carCareProducts
+                                .map((p) => p.brand.toLowerCase())
+                                .indexOf(categoryLowerCase) !==
+                              carCareProducts.indexOf(part);
+
+                            // Render the option only if it's not a duplicate
+                            if (!isDuplicate) {
+                              return (
+                                <option key={part.id} value={part.brand}>
+                                  {part.brand}
+                                </option>
+                              );
+                            }
+
+                            return null; // Return null for duplicates to skip rendering
+                          })}
                         </select>
 
                         <select
@@ -231,15 +271,24 @@ const ShopCarCareProducts = () => {
                           onChange={handleModelChange}
                         >
                           <option value="All">Select Model</option>
-                          <option value="Civic">Civic</option>
-                          <option value="Mehran">Mehran</option>
-                          <option value="Corolla">Corolla</option>
-                          <option value="Alto">Alto</option>
+                          {Array.from(
+                            new Set(
+                              carCareProducts
+                                .flatMap((part) => part.compatibility) // Flatten compatibility arrays
+                                .map((compatibilityItem) =>
+                                  compatibilityItem.toLowerCase()
+                                ) // Convert to lowercase for consistent comparison
+                            )
+                          ).map((uniqueCompatibilityItem, index) => (
+                            <option key={index} value={uniqueCompatibilityItem}>
+                              {uniqueCompatibilityItem.toUpperCase()}
+                            </option>
+                          ))}
                         </select>
 
                         <PriceRangeSlider
                           min={0}
-                          max={10000}
+                          max={100000}
                           value={priceRange}
                           onChange={handlePriceRangeChange}
                         />

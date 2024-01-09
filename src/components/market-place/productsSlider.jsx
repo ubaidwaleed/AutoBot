@@ -10,66 +10,7 @@ import { useEffect, useState } from "react";
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 import { AiOutlineShoppingCart } from "@react-icons/all-files/ai/AiOutlineShoppingCart";
 import titleImage from "../../assets/images/titleImage.png";
-
-const productsData = [
-  {
-    title: "Glossy Gray 19' Aluminium Wheel AR-19",
-    price: 24.99,
-    name: "Wheel",
-    image_url:
-      "https://red-parts.react.themeforest.scompiler.ru/themes/blue/images/products/product-4-1.jpg",
-  },
-  {
-    title: "Twin Exhaust Pipe From Brandix Z54",
-    price: 39.99,
-    name: "Exhaust",
-    image_url:
-      "https://red-parts.react.themeforest.scompiler.ru/themes/blue/images/products/product-5-1.jpg",
-  },
-  {
-    title: "Motor Oil Level 5",
-    price: 14.95,
-    name: "Oil",
-    image_url:
-      "https://red-parts.react.themeforest.scompiler.ru/themes/blue/images/products/product-6-1.jpg",
-  },
-
-  {
-    title: "Brandix Clutch Discs Z175",
-    price: 9.99,
-    name: "Clutch",
-    image_url:
-      "https://red-parts.react.themeforest.scompiler.ru/themes/blue/images/products/product-8-1.jpg",
-  },
-  {
-    title: "Brandix Engine Block Z4",
-    price: 49.99,
-    name: "Engine",
-    image_url:
-      "https://red-parts.react.themeforest.scompiler.ru/themes/blue/images/products/product-7-1.jpg",
-  },
-  {
-    title: "Brandix Spark Plug Kit ASR-400",
-    price: 29.99,
-    name: "Plug",
-    image_url:
-      "https://red-parts.react.themeforest.scompiler.ru/themes/blue/images/products/product-1-1.jpg",
-  },
-  {
-    title: "Brandix Brake Kit BDX-750Z370-S",
-    price: 29.99,
-    name: "Brake",
-    image_url:
-      "https://red-parts.react.themeforest.scompiler.ru/themes/blue/images/products/product-2-1.jpg",
-  },
-  {
-    title: "Left Headlight Of Brandix Z54",
-    price: 29.99,
-    name: "Headlight",
-    image_url:
-      "https://red-parts.react.themeforest.scompiler.ru/themes/blue/images/products/product-3-1.jpg",
-  },
-];
+import { useNavigate } from "react-router-dom";
 
 function SampleNextArrow(props) {
   const { onClick } = props;
@@ -126,6 +67,114 @@ const ProductsSlider = () => {
     ],
   };
 
+  const [accessories, setAccessories] = useState([]);
+  const [parts, setParts] = useState([]);
+  const [carCareProducts, setCarCareProducts] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchAccessories = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/getaccessories/");
+        if (!response.ok) {
+          throw new Error("Network response was not ok.");
+        }
+        const data = await response.json();
+        if (
+          data &&
+          data.message === "Accessories found" &&
+          data.data &&
+          data.data.accessoriesdata
+        ) {
+          setAccessories(data.data.accessoriesdata);
+        }
+      } catch (error) {
+        console.error("Error fetching accessories:", error);
+      }
+    };
+
+    fetchAccessories();
+  }, []);
+
+  useEffect(() => {
+    const fetchParts = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/getparts");
+        if (!response.ok) {
+          throw new Error("Network response was not ok.");
+        }
+        const data = await response.json();
+        if (
+          data &&
+          data.message === "parts found" &&
+          data.data &&
+          data.data.partsdata
+        ) {
+          setParts(data.data.partsdata);
+        }
+      } catch (error) {
+        console.error("Error fetching parts:", error);
+      }
+    };
+
+    fetchParts();
+  }, []);
+
+  useEffect(() => {
+    const fetchCarCareProducts = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/getcarcareproducts"
+        ); // Replace with your actual endpoint
+        if (!response.ok) {
+          throw new Error("Network response was not ok.");
+        }
+        const data = await response.json();
+        console.log("Care care products data", data);
+        if (
+          data &&
+          data.message === "parts found" &&
+          data.data &&
+          data.data.partsdata &&
+          data.data.partsdata.length > 0
+        ) {
+          setCarCareProducts(data.data.partsdata);
+        }
+      } catch (error) {
+        console.error("Error fetching accessories:", error);
+      }
+    };
+
+    fetchCarCareProducts();
+  }, []);
+
+  // Combining states into a single state object
+  const combinedData = {
+    accessories,
+    parts,
+    carCareProducts,
+  };
+
+  const allItems = [
+    ...combinedData.accessories,
+    ...combinedData.parts,
+    ...combinedData.carCareProducts,
+  ];
+
+  // Sort items by 'numberoforders' in descending order
+  const sortedItems = allItems.sort(
+    (a, b) => b.numberoforders - a.numberoforders
+  );
+
+  // Get the top 10 items with highest 'numberoforders'
+  const top10Items = sortedItems.slice(0, 10);
+
+  console.log("Top 10 items:", top10Items);
+
+  const handleAccessoryClick = (clickedProduct) => {
+    navigate(`/single-product`, { state: { productData: clickedProduct } });
+  };
+
   return (
     <div className="px-12 py-16 lg:px-20 md:px-16 sm:px-12" id="products">
       <div className="px-12 text-center text-black lg:px-60">
@@ -141,25 +190,34 @@ const ProductsSlider = () => {
 
       <div className="mt-8">
         <Slider {...settings}>
-          {productsData.map((product, index) => (
-            <div className="px-2 card hover:shadow-md" key={product.index}>
+          {top10Items.map((product, index) => (
+            <div
+              className="px-2 card hover:shadow-md"
+              key={index}
+              onClick={() => handleAccessoryClick(product)}
+            >
               <div className="">
                 <div className="relative h-full">
                   <img
                     className="w-full h-full"
-                    src={product.image_url}
-                    alt=""
+                    src={product.images[0]}
+                    alt={product.name}
                   />
                   <p className="px-4 py-2 bg-[#1a79ff] font-medium inline-block text-sm product-name text-white">
-                    {product.name}
+                    {product.name.split(" ").slice(0, 2).join(" ")}
                   </p>
                 </div>
                 <div className="px-4 py-8 mt-2 text-black ">
+                  <h1 className="text-base font-medium text-title">
+                    {product.brand}
+                  </h1>
                   <h2 className="text-base font-medium text-title">
-                    {product.title}
+                    {product.description.length > 10
+                      ? `${product.description.substring(0, 30)}`
+                      : product.description}
                   </h2>
                   <div className="flex items-center justify-between pt-2 text-[#1a79ff] font-bold">
-                    <p>${product.price}</p>
+                    <p>Rs. {product.price}</p>
                     <div className="shopping-icon rounded-3xl">
                       <p className="px-2 py-2 duration-300 cursor-pointer ">
                         <AiOutlineShoppingCart className="w-6 h-6"></AiOutlineShoppingCart>

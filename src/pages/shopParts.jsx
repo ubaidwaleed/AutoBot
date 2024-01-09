@@ -10,7 +10,7 @@ const PriceRangeSlider = ({ min, max, value, onChange }) => {
     <div className="mt-4 w-96">
       <div className="flex items-center justify-between">
         <p className="font-medium">Price Range</p>
-        <p>{`$${value[0]} - $${value[1]}`}</p>
+        <p>{`Rs. ${value[0]} - Rs. ${value[1]}`}</p>
       </div>
       <Slider
         range
@@ -44,7 +44,7 @@ const ShopParts = () => {
     setSelectedModel(e.target.value);
   };
 
-  const [priceRange, setPriceRange] = useState([0, 1000000]); // Initial values, adjust as needed
+  const [priceRange, setPriceRange] = useState([0, 100000]); // Initial values, adjust as needed
 
   const handlePriceRangeChange = (value) => {
     setPriceRange(value);
@@ -111,7 +111,7 @@ const ShopParts = () => {
     setSelectedCategory("All");
     setSelectedMake("All");
     setSelectedModel("All");
-    setPriceRange([0, 1000000]); // Reset price range
+    setPriceRange([0, 100000]); // Reset price range
     setSearchTerm(""); // Reset search term
   };
 
@@ -159,7 +159,7 @@ const ShopParts = () => {
           <Sidebar />
           {/* ...................image with dropdowns............. */}
           <div className="relative">
-            <div className="relative w-full h-[400px] ">
+            <div className="relative w-full h-[550px] lg:h-[430px]">
               <img
                 src="src/assets/images/marketplace/carbon-fiber-background.jpg"
                 alt="Your Image"
@@ -209,38 +209,83 @@ const ShopParts = () => {
                           onChange={handleCategoryChange}
                         >
                           <option value="All">Select a Category</option>
-                          <option value="Interior">Interior</option>
-                          <option value="Exterior">Exterior</option>
-                        </select>
+                          {parts.map((part) => {
+                            // Convert all categories to lowercase for comparison
+                            const categoryLowerCase =
+                              part.subcategory.toLowerCase();
 
+                            // Check if any lowercase version of the category already exists in the rendered options
+                            const isDuplicate =
+                              parts
+                                .map((p) => p.subcategory.toLowerCase())
+                                .indexOf(categoryLowerCase) !==
+                              parts.indexOf(part);
+
+                            // Render the option only if it's not a duplicate
+                            if (!isDuplicate) {
+                              return (
+                                <option key={part.id} value={part.subcategory}>
+                                  {part.subcategory}
+                                </option>
+                              );
+                            }
+
+                            return null; // Return null for duplicates to skip rendering
+                          })}
+                        </select>
                         <select
                           className="w-full px-4 py-3 text-sm bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
                           value={selectedMake}
                           onChange={handleMakeChange}
                         >
                           <option value="All">Select Make</option>
-                          <option value="Toyota">Toyota</option>
-                          <option value="Honda">Honda</option>
-                          <option value="Suzuki">Suzuki</option>
-                        </select>
+                          {parts.map((part) => {
+                            // Convert all categories to lowercase for comparison
+                            const categoryLowerCase = part.brand.toLowerCase();
 
+                            // Check if any lowercase version of the category already exists in the rendered options
+                            const isDuplicate =
+                              parts
+                                .map((p) => p.brand.toLowerCase())
+                                .indexOf(categoryLowerCase) !==
+                              parts.indexOf(part);
+
+                            // Render the option only if it's not a duplicate
+                            if (!isDuplicate) {
+                              return (
+                                <option key={part.id} value={part.brand}>
+                                  {part.brand}
+                                </option>
+                              );
+                            }
+
+                            return null; // Return null for duplicates to skip rendering
+                          })}
+                        </select>
                         <select
                           className="w-full px-4 py-3 text-sm bg-gray-100 border-transparent rounded-md focus:border-gray-500 focus:bg-white focus:ring-0"
                           value={selectedModel}
                           onChange={handleModelChange}
                         >
                           <option value="All">Select Model</option>
-                          <option value="Civic">Civic</option>
-                          <option value="Mehran">Mehran</option>
-                          <option value="Hilux">Hilux</option>
-                          <option value="Corolla">Corolla</option>
-                          <option value="Alto">Alto</option>
+                          {Array.from(
+                            new Set(
+                              parts
+                                .flatMap((part) => part.compatibility)
+                                .map((compatibilityItem) =>
+                                  compatibilityItem.toLowerCase()
+                                )
+                            )
+                          ).map((uniqueCompatibilityItem, index) => (
+                            <option key={index} value={uniqueCompatibilityItem}>
+                              {uniqueCompatibilityItem.toUpperCase()}
+                            </option>
+                          ))}
                         </select>
-
                         {/* PriceRangeSlider component */}
                         <PriceRangeSlider
                           min={0}
-                          max={1000000}
+                          max={100000}
                           value={priceRange}
                           onChange={handlePriceRangeChange}
                         />

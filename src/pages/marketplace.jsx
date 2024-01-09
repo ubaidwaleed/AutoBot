@@ -8,6 +8,7 @@ import Accessories from "../components/market-place/accessories";
 import Parts from "../components/market-place/parts";
 import Footer from "../components/market-place/footer";
 import GoToTop from "../Hooks/GoToTop";
+import CarCareProducts from "../components/market-place/carCareProducts";
 
 function FeatureCard({ iconSrc, title, description }) {
   return (
@@ -139,6 +140,9 @@ function Marketplace() {
       </div>
       <div className="relative ml-16">
         <Parts />
+      </div>
+      <div className="relative ml-16">
+        <CarCareProducts />
       </div>
       <div className="relative ml-16">
         <Footer />

@@ -89,7 +89,7 @@ const Info = ({
           <div className="flex items-center justify-between gap-5">
             <div className="flex items-center gap-3">
               <span className="text-3xl font-bold titles">
-                ${receivedProductData?.price}
+                Rs. {receivedProductData?.price}
               </span>
             </div>
           </div>

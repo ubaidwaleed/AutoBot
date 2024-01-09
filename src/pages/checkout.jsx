@@ -207,7 +207,9 @@ const Checkout = ({ token }) => {
                     <span className="float-right text-gray-400">
                       {item.product.brand}
                     </span>
-                    <p className="font-bold text-md">${item.product.price}</p>
+                    <p className="font-bold text-md">
+                      Rs. {item.product.price}
+                    </p>
                     {/* Display "Quanty" label and "10" below quantity */}
                   </div>
 
@@ -217,7 +219,7 @@ const Checkout = ({ token }) => {
                       x {item.quantity}
                     </span>
                     <span className="float-right text-lg font-bold">
-                      {"$" + item.product.price * item.quantity}
+                      {"Rs. " + item.product.price * item.quantity}
                     </span>
                   </div>
                 </div>
@@ -571,7 +573,9 @@ const Checkout = ({ token }) => {
               <div className="py-2 mt-6 border-t border-b">
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-medium text-gray-900">Subtotal</p>
-                  <p className="font-semibold text-gray-900">${cartSubTotal}</p>
+                  <p className="font-semibold text-gray-900">
+                    Rs. {cartSubTotal}
+                  </p>
                 </div>
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-medium text-gray-900">Shipping</p>
@@ -583,7 +587,7 @@ const Checkout = ({ token }) => {
               <div className="flex items-center justify-between mt-6">
                 <p className="text-sm font-medium text-gray-900">Total</p>
                 <p className="text-2xl font-semibold text-gray-900">
-                  ${cartSubTotal}
+                  Rs. {cartSubTotal}
                 </p>
               </div>
             </div>

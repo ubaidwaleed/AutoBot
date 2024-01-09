@@ -213,10 +213,11 @@ function Cart() {
                           </svg>
                         </div>
                         <span className="w-1/5 text-sm font-semibold text-center">
-                          ${cart?.product?.price}
+                          Rs. {cart?.product?.price}
                         </span>
                         <span className="w-1/5 text-sm font-semibold text-center">
-                          ${(cart?.product?.price * cart?.quantity).toFixed(2)}
+                          Rs.{" "}
+                          {(cart?.product?.price * cart?.quantity).toFixed(2)}
                         </span>
                       </div>
                     );
@@ -232,14 +233,14 @@ function Cart() {
                     Items : {cartItems?.length}
                   </span>
                   <span className="text-sm font-semibold">
-                    ${total?.toFixed(2)}
+                    Rs. {total?.toFixed(2)}
                   </span>
                 </div>
 
                 <div className="mt-8 border-t">
                   <div className="flex justify-between py-6 text-sm font-semibold uppercase">
                     <span>Total cost</span>
-                    <span>${total.toFixed(2)}</span>
+                    <span>Rs. {total.toFixed(2)}</span>
                   </div>
                   <Link
                     to="/checkout"
