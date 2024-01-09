@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import Modal from "react-modal";
 import { GiConfirmed } from "react-icons/gi";
 import { toast } from "react-toastify";
+import emailjs from "@emailjs/browser";
 
 const Checkout = ({ token }) => {
   const { cartSubTotal, cartItems, clearCart } = useContext(CartContext);
@@ -114,6 +115,47 @@ const Checkout = ({ token }) => {
     return Object.values(errors).some((error) => error);
   };
 
+  const sendConfirmationEmail = () => {
+    const serviceID = "service_ddiblm2";
+    const templateID = "template_ug52ht8";
+    const userID = "4MXGAO3hZxJVn4MyV";
+
+    // Extract values from shipping address
+    const { firstname, lastname, email } = shippingAddress;
+
+    // Construct the 'to_name', 'from_name', 'to_email' for the email template
+    const heading = "Order Details: ";
+    const to_name = `${firstname} ${lastname}`;
+    const from_name = "AutoBot";
+    const to_email = email;
+    const total_price = `Price: Rs. ${orderDetails.total_price}`;
+
+    // Construct the message for the email template
+    const orderItems = orderDetails.items
+      .map((item) => `${item.product_name} - Quantity: ${item.quantity}`)
+      .join("\n");
+
+    const message = `Order Details:\n${orderItems}\nSubtotal: Rs. ${orderDetails.sub_total_price}\nShipping Price: Rs. ${orderDetails.shipping_price}`;
+
+    const templateParams = {
+      to_name,
+      from_name,
+      to_email,
+      heading,
+      message,
+      total_price,
+    };
+
+    emailjs
+      .send(serviceID, templateID, templateParams, userID)
+      .then((response) => {
+        console.log("Email sent!", response.status, response.text);
+      })
+      .catch((error) => {
+        console.error("Error sending email:", error);
+      });
+  };
+
   const handlePlaceOrder = () => {
     const hasErrors = validateForm();
 
@@ -143,7 +185,7 @@ const Checkout = ({ token }) => {
           return response.json();
         })
         .then((data) => {
-          // Handle the response from the server
+          sendConfirmationEmail();
 
           toast.update(toastOrder, {
             type: toast.TYPE.SUCCESS,
