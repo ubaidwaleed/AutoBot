@@ -45,6 +45,8 @@ function SignUp() {
           options: {
             data: {
               full_name: formData.name,
+              //type: "admin", //    in case admin signup
+              type: "user", // in case user signup
             },
           },
         });

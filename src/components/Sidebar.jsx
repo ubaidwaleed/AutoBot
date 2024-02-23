@@ -15,6 +15,10 @@ import CartContext from "../context/cart-context/cartContext";
 import { TbLogout2 } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
+import { FaClipboardList, FaCarBattery } from "react-icons/fa";
+import { GiSteeringWheel } from "react-icons/gi";
+import { FaSprayCan } from "react-icons/fa";
+import { GiCartwheel } from "react-icons/gi";
 
 const SidebarIcon = ({ icon, text = "tooltip", onClick }) => (
   <div className="sidebar-icon group" onClick={onClick}>
@@ -125,7 +129,12 @@ const Sidebar = () => {
     navigate("/");
   }
 
+  const storedToken1 = JSON.parse(sessionStorage.getItem("token"));
+  const isAdmin = storedToken1.user.user_metadata.type === "admin";
+  const isUser = storedToken1.user.user_metadata.type === "user";
+
   const { cartItems, clearCart } = useContext(CartContext);
+
   return (
     <div className="fixed top-0 left-0 z-50 flex flex-col w-16 h-screen m-0 text-white bg-gray-900 shadow-lg">
       <div className="mt-5" />
@@ -145,14 +154,42 @@ const Sidebar = () => {
         text="Need help from AutoBot ?"
         onClick={() => navigate("/autobot")}
       />
-
-      <SidebarIcon
-        icon={<FaShopify size="28" />}
-        text="Checkout our marketplace"
-        onClick={() => navigate("/marketplace")}
-      />
+      {isAdmin && (
+        <SidebarIcon
+          icon={<FaClipboardList size="28" />}
+          text="Orders"
+          onClick={() => navigate("/orders")}
+        />
+      )}
+      {isAdmin && (
+        <SidebarIcon
+          icon={<GiCartwheel size="28" />}
+          text="Parts"
+          onClick={() => navigate("/parts")}
+        />
+      )}{" "}
+      {isAdmin && (
+        <SidebarIcon
+          icon={<GiSteeringWheel size="28" />}
+          text="Accessories"
+          onClick={() => navigate("/accessories")}
+        />
+      )}{" "}
+      {isAdmin && (
+        <SidebarIcon
+          icon={<FaSprayCan size="28" />}
+          text="Car Care Products"
+          onClick={() => navigate("/car-care-products")}
+        />
+      )}
+      {isUser && (
+        <SidebarIcon
+          icon={<FaShopify size="28" />}
+          text="Checkout our marketplace"
+          onClick={() => navigate("/marketplace")}
+        />
+      )}
       <div className="flex-grow"></div>
-
       <div style={{ position: "relative", display: "inline-block" }}>
         {/* Display the cart items count */}
         {cartItems.length > 0 && (
@@ -177,18 +214,18 @@ const Sidebar = () => {
         )}
 
         {/* Render the shopping cart icon */}
-        <SidebarIcon
-          icon={<AiOutlineShoppingCart size="28" />}
-          text="Your shopping cart"
-          onClick={() => navigate("/cart")}
-        />
+        {isUser && (
+          <SidebarIcon
+            icon={<AiOutlineShoppingCart size="28" />}
+            text="Your shopping cart"
+            onClick={() => navigate("/cart")}
+          />
+        )}
       </div>
-
       <SidebarLine />
       <div className="z-50">
         <UserMenu />
       </div>
-
       <SidebarIcon
         icon={<TbLogout2 size="28" />}
         text="Logout"

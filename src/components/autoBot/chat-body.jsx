@@ -35,7 +35,7 @@ const civic = [
     price: "8.5 Million",
     description:
       "A budget-friendly option that offers great value and practicality.",
-    link: "https://www.pakwheels.com/used-cars/honda-civic-2022-for-sale-in-lahore-8166375",
+    link: "https://www.pakwheels.com/used-cars/honda-civic-2019-for-sale-in-lahore-8272719",
   },
 ];
 

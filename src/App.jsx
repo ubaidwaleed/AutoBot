@@ -23,6 +23,10 @@ import ShopCarCareProducts from "./pages/shopCareCareProducts";
 import Page404 from "./pages/page404";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AddAccessories from "./pages/addAccessories";
+import AddCarCareProducts from "./pages/addCarCareProducts";
+import AddParts from "./pages/addParts";
+import Orders from "./pages/orders";
 
 function App() {
   const [token, setToken] = useState(false);
@@ -107,6 +111,32 @@ function App() {
           <Route path="/checkout" element={<Checkout token={token} />} />
         ) : (
           <Route path="/checkout" element={<Page404 />} />
+        )}
+        {token ? (
+          <Route path="/orders" element={<Orders token={token} />} />
+        ) : (
+          <Route path="/orders" element={<Page404 />} />
+        )}
+        {token ? (
+          <Route path="/parts" element={<AddParts token={token} />} />
+        ) : (
+          <Route path="/parts" element={<Page404 />} />
+        )}
+        {token ? (
+          <Route
+            path="/accessories"
+            element={<AddAccessories token={token} />}
+          />
+        ) : (
+          <Route path="/accessories" element={<Page404 />} />
+        )}
+        {token ? (
+          <Route
+            path="/car-care-products"
+            element={<AddCarCareProducts token={token} />}
+          />
+        ) : (
+          <Route path="/car-care-products" element={<Page404 />} />
         )}
       </Routes>
     </CartContextProvider>
