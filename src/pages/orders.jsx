@@ -1,7 +1,8 @@
-import React from "react";
+import OrdersTable from "../components/orders/OrdersTable";
 import Sidebar from "../components/Sidebar";
+import OrdersHeader from "../components/orders/OrdersHeader";
 
-const Orders = () => {
+const Orders = ({ token }) => {
   return (
     <>
       <div className="flex">
@@ -12,7 +13,12 @@ const Orders = () => {
           <div className="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
             <main>
               <div className="w-full px-4 py-8 mx-auto sm:px-6 lg:px-8 max-w-9xl">
-                Orders
+                <OrdersHeader token={token} />
+                <div className="grid grid-cols-12 gap-6">
+                  <div className="col-span-12">
+                    <OrdersTable />
+                  </div>{" "}
+                </div>
               </div>
             </main>
           </div>
