@@ -1,6 +1,5 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+
 import Shop from "./pages/shop";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
@@ -27,6 +26,9 @@ import AddAccessories from "./pages/addAccessories";
 import AddCarCareProducts from "./pages/addCarCareProducts";
 import AddParts from "./pages/addParts";
 import Orders from "./pages/orders";
+import AddPartForm from "./components/add-parts/AddPartForm";
+import AddAccessoriesForm from "./components/add-accessories/AddAccessoriesForm";
+import AddCarCareProductsForm from "./components/add-car-car-products/AddCarCareProductsForm";
 
 function App() {
   const [token, setToken] = useState(false);
@@ -123,6 +125,11 @@ function App() {
           <Route path="/parts" element={<Page404 />} />
         )}
         {token ? (
+          <Route path="/add-part" element={<AddPartForm token={token} />} />
+        ) : (
+          <Route path="/add-part" element={<Page404 />} />
+        )}
+        {token ? (
           <Route
             path="/accessories"
             element={<AddAccessories token={token} />}
@@ -132,11 +139,27 @@ function App() {
         )}
         {token ? (
           <Route
+            path="/add-accessories"
+            element={<AddAccessoriesForm token={token} />}
+          />
+        ) : (
+          <Route path="/add-accessories" element={<Page404 />} />
+        )}
+        {token ? (
+          <Route
             path="/car-care-products"
             element={<AddCarCareProducts token={token} />}
           />
         ) : (
           <Route path="/car-care-products" element={<Page404 />} />
+        )}
+        {token ? (
+          <Route
+            path="/add-car-care-products"
+            element={<AddCarCareProductsForm token={token} />}
+          />
+        ) : (
+          <Route path="/add-car-care-products" element={<Page404 />} />
         )}
       </Routes>
     </CartContextProvider>
