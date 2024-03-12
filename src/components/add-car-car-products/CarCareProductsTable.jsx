@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import { BiXCircle } from "react-icons/bi";
+import { toast } from "react-toastify";
 
 function CarCareProductsTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
+  const [carCareProducts, setCarCareProducts] = useState([]);
+  const [selectedCarCareProduct, setSelectedCarCareProduct] = useState(null);
+  const navigate = useNavigate();
 
   const itemsPerPage = 9; // Number of items per page
 
@@ -17,37 +21,115 @@ function CarCareProductsTable() {
 
   const handleCloseModal = () => {
     setShowModal(false);
+    setSelectedCarCareProduct(null);
     // clearCart();
   };
 
-  // Calculate indexes for slicing the data array based on current page and items per page
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const carCareProductsData = [
-    {
-      id: 1,
-      name: "Car bumper",
-      type: "Bumper",
-      brand: "Suzuki",
-      price: "7878 PKR",
-      quantity: "109979",
-    },
-  ];
-
   const handleEditButtonClick = (rowData) => {
     console.log("Edit clicked for row data:", rowData);
+
+    navigate("/update-car-care-product", { state: { rowData: rowData } });
   };
 
   const handleDeleteButtonClick = (rowData) => {
     setShowModal(true);
-
-    console.log("Delete clicked for row data:", rowData);
+    setSelectedCarCareProduct(rowData);
   };
 
-  const currentItems = carCareProductsData.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
+  const handleDeleteConfirm = async () => {
+    const toastDelete = toast.loading("Deleting product...", {
+      autoClose: false,
+    });
+
+    try {
+      const response = await fetch(
+        "http://localhost:3000/deletecarcareproducts",
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            carcareproduct_id: selectedCarCareProduct.carcareproduct_id,
+          }),
+        }
+      );
+      if (!response.ok) {
+        toast.update(toastDelete, {
+          type: toast.TYPE.ERROR,
+          render: "Network response was not ok",
+          autoClose: 5000, // Adjust the time or set it to 0 for manual close
+          isLoading: false,
+        });
+        throw new Error("Network response was not ok.");
+      }
+
+      const responseBody = await response.json();
+      console.log(responseBody);
+
+      toast.update(toastDelete, {
+        type: toast.TYPE.SUCCESS,
+        render: "Product Deleted!",
+        autoClose: 3000, // Adjust the time or set it to 0 for manual close
+        isLoading: false,
+      });
+      setCarCareProducts(
+        carCareProducts.filter(
+          (part) =>
+            part.carcareproduct_id !== selectedCarCareProduct.carcareproduct_id
+        )
+      );
+
+      handleCloseModal();
+    } catch (error) {
+      toast.update(toastDelete, {
+        type: toast.TYPE.ERROR,
+        render: error.message,
+        autoClose: 5000, // Adjust the time or set it to 0 for manual close
+        isLoading: false,
+      });
+      console.error("Error deleting part:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchParts = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/getcarcareproducts"
+        ); // Replace with your actual endpoint
+        if (!response.ok) {
+          throw new Error("Network response was not ok.");
+        }
+        const data = await response.json();
+        if (
+          data &&
+          data.message === "parts found" &&
+          data.data &&
+          data.data.partsdata &&
+          data.data.partsdata.length > 0
+        ) {
+          setCarCareProducts(data.data.partsdata);
+          console.log("Car Care Products data", carCareProducts);
+        }
+      } catch (error) {
+        console.error("Error fetching parts:", error);
+      }
+    };
+
+    fetchParts();
+  }, []);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  // Update the condition for Next button to check against the total number of items
+  const hasNextPage = indexOfLastItem < carCareProducts.length;
+
+  // Update the condition for Previous button to check if currentPage is greater than 1
+  const hasPreviousPage = currentPage > 1;
+
+  const currentItems = carCareProducts.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <>
@@ -103,12 +185,14 @@ function CarCareProductsTable() {
                     <td className="p-2">
                       <div className="flex items-center">
                         <div className="text-slate-800 ">
-                          {carCareProduct.id}
+                          {carCareProduct.carcareproduct_id}
                         </div>
                       </div>
                     </td>
                     <td className="p-2">
-                      <div className="text-center">{carCareProduct.name}</div>
+                      <div className="text-center">
+                        {carCareProduct.name.split(" ").slice(0, 6).join(" ")}
+                      </div>
                     </td>
                     <td className="p-2">
                       <div className="text-center ">{carCareProduct.type}</div>
@@ -153,14 +237,14 @@ function CarCareProductsTable() {
               {/* Render pagination buttons */}
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
+                disabled={!hasPreviousPage}
                 className="px-2 py-1 mr-2 text-sm text-gray-600 bg-gray-200 rounded hover:bg-gray-300"
               >
                 Previous
               </button>
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
-                disabled={indexOfLastItem >= carCareProductsData.length}
+                disabled={!hasNextPage}
                 className="px-2 py-1 text-sm text-white bg-blue-500 rounded hover:bg-blue-600"
               >
                 Next
@@ -186,7 +270,10 @@ function CarCareProductsTable() {
             Are you sure you want to remove this item?
           </p>
           <div className="flex justify-center mt-6 space-x-4">
-            <button className="px-4 py-2 text-lg font-semibold text-white transition duration-300 bg-red-500 rounded-md hover:bg-red-600">
+            <button
+              className="px-4 py-2 text-lg font-semibold text-white transition duration-300 bg-red-500 rounded-md hover:bg-red-600"
+              onClick={handleDeleteConfirm}
+            >
               Confirm
             </button>
             <button

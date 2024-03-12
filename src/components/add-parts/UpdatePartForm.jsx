@@ -1,54 +1,30 @@
 import { useState } from "react";
 import Sidebar from "../Sidebar";
-import AddPartFormHeader from "./AddPartFormHeader";
-import { useNavigate } from "react-router-dom";
+import UpdatePartFormHeader from "./UpdatePartFormHeader";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const AddPartForm = () => {
+const UpdatePartForm = () => {
   // State variables to hold form data
   const navigate = useNavigate();
+  const location = useLocation();
+  const { rowData } = location.state;
 
   const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    category: "",
-    brand: "",
-    price: "",
-    quantity: "",
-    images: [],
-    compatibility: [],
-    type: "",
-    subcategory: "",
+    name: rowData.name,
+    description: rowData.description,
+    category: rowData.category,
+    brand: rowData.brand,
+    price: rowData.price,
+    quantity: rowData.quantity,
+    images: rowData.images.join(","),
+    compatibility: rowData.compatibility.join(","),
+    type: rowData.type,
+    subcategory: rowData.subcategory,
   });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const updatedFormData = {
-      ...formData,
-      images: formData.images.split(","),
-      compatibility: formData.compatibility.split(","),
-    };
-
-    console.log(updatedFormData);
-
-    try {
-      const response = await fetch("http://localhost:3000/addparts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        // Redirect to /parts on successful addition
-        console.log("ok");
-        navigate("/parts");
-      } else {
-        console.error("Error adding part:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error adding part:", error);
-    }
+    console.log(formData);
   };
 
   // Handle input changes
@@ -69,7 +45,7 @@ const AddPartForm = () => {
           <div className="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
             <main>
               <div className="w-full px-4 py-8 mx-auto sm:px-6 lg:px-8 max-w-9xl">
-                <AddPartFormHeader />
+                <UpdatePartFormHeader />
                 <div className="grid grid-cols-12 gap-6">
                   <div className="col-span-12">
                     <form
@@ -240,7 +216,7 @@ const AddPartForm = () => {
                           type="submit"
                           className="px-6 py-3 text-2xl text-white bg-indigo-500 rounded-xl hover:bg-indigo-600"
                         >
-                          Add +
+                          Update +
                         </button>
                       </div>
                     </form>
@@ -255,4 +231,4 @@ const AddPartForm = () => {
   );
 };
 
-export default AddPartForm;
+export default UpdatePartForm;

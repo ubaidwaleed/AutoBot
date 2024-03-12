@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import Shop from "./pages/shop";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
@@ -29,6 +28,9 @@ import Orders from "./pages/orders";
 import AddPartForm from "./components/add-parts/AddPartForm";
 import AddAccessoriesForm from "./components/add-accessories/AddAccessoriesForm";
 import AddCarCareProductsForm from "./components/add-car-car-products/AddCarCareProductsForm";
+import UpdatePartForm from "./components/add-parts/UpdatePartForm";
+import UpdateAccessoryForm from "./components/add-accessories/UpdateAccessoryForm";
+import UpdateCarCareForm from "./components/add-car-car-products/UpdateCarCareForm";
 
 function App() {
   const [token, setToken] = useState(false);
@@ -131,6 +133,14 @@ function App() {
         )}
         {token ? (
           <Route
+            path="/update-part"
+            element={<UpdatePartForm token={token} />}
+          />
+        ) : (
+          <Route path="/update-part" element={<Page404 />} />
+        )}
+        {token ? (
+          <Route
             path="/accessories"
             element={<AddAccessories token={token} />}
           />
@@ -147,6 +157,14 @@ function App() {
         )}
         {token ? (
           <Route
+            path="/update-accessory"
+            element={<UpdateAccessoryForm token={token} />}
+          />
+        ) : (
+          <Route path="/accessories" element={<Page404 />} />
+        )}
+        {token ? (
+          <Route
             path="/car-care-products"
             element={<AddCarCareProducts token={token} />}
           />
@@ -160,6 +178,14 @@ function App() {
           />
         ) : (
           <Route path="/add-car-care-products" element={<Page404 />} />
+        )}
+        {token ? (
+          <Route
+            path="/update-car-care-product"
+            element={<UpdateCarCareForm token={token} />}
+          />
+        ) : (
+          <Route path="/update-car-care-products" element={<Page404 />} />
         )}
       </Routes>
     </CartContextProvider>
