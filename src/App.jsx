@@ -31,6 +31,7 @@ import AddCarCareProductsForm from "./components/add-car-car-products/AddCarCare
 import UpdatePartForm from "./components/add-parts/UpdatePartForm";
 import UpdateAccessoryForm from "./components/add-accessories/UpdateAccessoryForm";
 import UpdateCarCareForm from "./components/add-car-car-products/UpdateCarCareForm";
+import OrderDetails from "./components/orders/OrderDetails";
 
 function App() {
   const [token, setToken] = useState(false);
@@ -120,6 +121,14 @@ function App() {
           <Route path="/orders" element={<Orders token={token} />} />
         ) : (
           <Route path="/orders" element={<Page404 />} />
+        )}
+        {token ? (
+          <Route
+            path="/order-details"
+            element={<OrderDetails token={token} />}
+          />
+        ) : (
+          <Route path="/order-details" element={<Page404 />} />
         )}
         {token ? (
           <Route path="/parts" element={<AddParts token={token} />} />

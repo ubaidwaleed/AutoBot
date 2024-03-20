@@ -24,7 +24,47 @@ const UpdateCarCareForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData);
+
+    // Split the images string into an array
+    const imagesArray = formData.images.split(",").map((image) => image.trim());
+    const compatibilityArray = formData.compatibility
+      .split(",")
+      .map((car) => car.trim());
+
+    // Update the formData with the images as an array
+    const updatedFormData = {
+      ...formData,
+      images: imagesArray,
+      compatibility: compatibilityArray,
+    };
+
+    const requestData = {
+      carcareproduct_id: rowData.carcareproduct_id,
+      updatedfields: updatedFormData,
+    };
+
+    console.log(JSON.stringify(requestData));
+
+    try {
+      const response = await fetch(
+        "http://localhost:3000/updatecarcareproducts",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update car car products");
+      }
+
+      navigate("/car-care-products"); // Example redirect
+    } catch (error) {
+      console.error("Error updating car car product:", error);
+    }
   };
 
   // Handle input changes

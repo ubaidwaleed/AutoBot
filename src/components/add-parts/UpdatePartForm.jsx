@@ -24,7 +24,44 @@ const UpdatePartForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData);
+
+    // Split the images string into an array
+    const imagesArray = formData.images.split(",").map((image) => image.trim());
+    const compatibilityArray = formData.compatibility
+      .split(",")
+      .map((car) => car.trim());
+
+    // Update the formData with the images as an array
+    const updatedFormData = {
+      ...formData,
+      images: imagesArray,
+      compatibility: compatibilityArray,
+    };
+
+    const requestData = {
+      part_id: rowData.part_id,
+      updatedfields: updatedFormData,
+    };
+
+    console.log(JSON.stringify(requestData));
+
+    try {
+      const response = await fetch("http://localhost:3000/updateparts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update parts");
+      }
+
+      navigate("/parts"); // Example redirect
+    } catch (error) {
+      console.error("Error updating parts:", error);
+    }
   };
 
   // Handle input changes

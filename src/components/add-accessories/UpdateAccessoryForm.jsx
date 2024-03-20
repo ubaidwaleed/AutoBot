@@ -8,7 +8,6 @@ const UpdateAccessoryForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { rowData } = location.state;
-  console.log("rowData.images:", rowData.images);
 
   const [formData, setFormData] = useState({
     name: rowData.name,
@@ -17,7 +16,7 @@ const UpdateAccessoryForm = () => {
     brand: rowData.brand,
     price: rowData.price,
     quantity: rowData.quantity,
-    images: rowData.images,
+    images: rowData.images.join(","),
     compatibility: rowData.compatibility.join(","),
     type: rowData.type,
     subcategory: rowData.subcategory,
@@ -25,7 +24,44 @@ const UpdateAccessoryForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData);
+
+    // Split the images string into an array
+    const imagesArray = formData.images.split(",").map((image) => image.trim());
+    const compatibilityArray = formData.compatibility
+      .split(",")
+      .map((car) => car.trim());
+
+    // Update the formData with the images as an array
+    const updatedFormData = {
+      ...formData,
+      images: imagesArray,
+      compatibility: compatibilityArray,
+    };
+
+    const requestData = {
+      accessory_id: rowData.accessory_id,
+      updatedfields: updatedFormData,
+    };
+
+    console.log(JSON.stringify(requestData));
+
+    try {
+      const response = await fetch("http://localhost:3000/updateaccessories", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update accessories");
+      }
+
+      navigate("/accessories"); // Example redirect
+    } catch (error) {
+      console.error("Error updating parts:", error);
+    }
   };
 
   // Handle input changes
@@ -160,9 +196,8 @@ const UpdateAccessoryForm = () => {
                           id="images"
                           name="images"
                           value={formData.images}
-                          rows={Math.max(formData.images.length, 1)}
                           onChange={handleChange}
-                          className="w-full h-auto p-2 mt-1 border border-gray-300 rounded-md"
+                          className="w-full h-24 p-2 mt-1 border border-gray-300 rounded-md"
                         />
                       </div>
                       <div>
