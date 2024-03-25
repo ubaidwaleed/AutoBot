@@ -32,6 +32,7 @@ import UpdatePartForm from "./components/add-parts/UpdatePartForm";
 import UpdateAccessoryForm from "./components/add-accessories/UpdateAccessoryForm";
 import UpdateCarCareForm from "./components/add-car-car-products/UpdateCarCareForm";
 import OrderDetails from "./components/orders/OrderDetails";
+import OrderDetailsCustomer from "./components/orders/OrderDetailsCustomer";
 
 function App() {
   const [token, setToken] = useState(false);
@@ -126,6 +127,14 @@ function App() {
           <Route
             path="/order-details"
             element={<OrderDetails token={token} />}
+          />
+        ) : (
+          <Route path="/order-details" element={<Page404 />} />
+        )}
+        {token ? (
+          <Route
+            path="/my-order-details"
+            element={<OrderDetailsCustomer token={token} />}
           />
         ) : (
           <Route path="/order-details" element={<Page404 />} />

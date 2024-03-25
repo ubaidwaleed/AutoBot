@@ -14,6 +14,7 @@ function Home({ token }) {
   // Check if the user type is "admin"
   const isAdmin = token.user.user_metadata.type === "admin";
   const isUser = token.user.user_metadata.type === "user";
+  const email = token.user.email;
 
   return (
     <>
@@ -34,8 +35,8 @@ function Home({ token }) {
                   {isAdmin && <DashboardCard5 />}
                   {isAdmin && <DashboardCard6 />}
                   {isAdmin && <DashboardCard7 />}
-                  {isUser && <DashboardCard9 />}
-                  {isUser && <DashboardCard8 />}
+                  {isUser && <DashboardCard9 email={email} />}
+                  {isUser && <DashboardCard8 email={email} />}
                 </div>
               </div>
             </main>

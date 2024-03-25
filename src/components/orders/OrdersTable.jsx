@@ -259,7 +259,6 @@ function OrdersTable() {
             </table>
             {/* Pagination */}
             <div className="flex justify-end mt-4">
-              {/* Render pagination buttons */}
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={!hasPreviousPage}

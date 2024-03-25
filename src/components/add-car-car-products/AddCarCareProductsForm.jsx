@@ -1,9 +1,10 @@
 import { useState } from "react";
 import Sidebar from "../Sidebar";
 import AddCarCareProductsFormHeader from "./AddCarCareProductsFormHeader";
+import { useNavigate } from "react-router-dom";
 
 const AddCarCareProductForm = () => {
-  // State variables to hold form data
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -17,16 +18,42 @@ const AddCarCareProductForm = () => {
     subcategory: "",
   });
 
-  // Handle form submission
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Add logic to handle form submission and data storage
-    console.log(formData);
+    const updatedFormData = {
+      ...formData,
+      images: formData.images.split(","),
+      compatibility: formData.compatibility.split(","),
+      numberoforders: 0,
+    };
+
+    console.log(updatedFormData);
+
+    try {
+      const response = await fetch("http://localhost:3000/addcarcareproducts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedFormData),
+      });
+
+      if (response.ok) {
+        // Redirect to /parts on successful addition
+        console.log("ok");
+        navigate("/car-care-products");
+      } else {
+        console.error("Error adding part:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error adding part:", error);
+    }
   };
 
   // Handle input changes
   const handleChange = (event) => {
     const { name, value } = event.target;
+
     setFormData({
       ...formData,
       [name]: value,
@@ -119,7 +146,7 @@ const AddCarCareProductForm = () => {
                           Price
                         </label>
                         <input
-                          type="text"
+                          type="number"
                           id="price"
                           name="price"
                           value={formData.price}
@@ -135,7 +162,7 @@ const AddCarCareProductForm = () => {
                           Quantity
                         </label>
                         <input
-                          type="text"
+                          type="number"
                           id="quantity"
                           name="quantity"
                           value={formData.quantity}
@@ -156,7 +183,7 @@ const AddCarCareProductForm = () => {
                           name="images"
                           value={formData.images}
                           onChange={handleChange}
-                          className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+                          className="w-full h-24 p-2 mt-1 border border-gray-300 rounded-md"
                         />
                       </div>
                       <div>

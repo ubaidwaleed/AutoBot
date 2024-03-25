@@ -4,7 +4,6 @@ import AddPartFormHeader from "./AddPartFormHeader";
 import { useNavigate } from "react-router-dom";
 
 const AddPartForm = () => {
-  // State variables to hold form data
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -26,6 +25,7 @@ const AddPartForm = () => {
       ...formData,
       images: formData.images.split(","),
       compatibility: formData.compatibility.split(","),
+      numberoforders: 0,
     };
 
     console.log(updatedFormData);
@@ -36,7 +36,7 @@ const AddPartForm = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(updatedFormData),
       });
 
       if (response.ok) {
@@ -51,7 +51,6 @@ const AddPartForm = () => {
     }
   };
 
-  // Handle input changes
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -147,7 +146,7 @@ const AddPartForm = () => {
                           Price
                         </label>
                         <input
-                          type="text"
+                          type="number"
                           id="price"
                           name="price"
                           value={formData.price}
@@ -163,7 +162,7 @@ const AddPartForm = () => {
                           Quantity
                         </label>
                         <input
-                          type="text"
+                          type="number"
                           id="quantity"
                           name="quantity"
                           value={formData.quantity}

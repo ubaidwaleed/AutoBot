@@ -163,7 +163,7 @@ const UpdateCarCareForm = () => {
                           Price
                         </label>
                         <input
-                          type="text"
+                          type="number"
                           id="price"
                           name="price"
                           value={formData.price}
@@ -179,7 +179,7 @@ const UpdateCarCareForm = () => {
                           Quantity
                         </label>
                         <input
-                          type="text"
+                          type="number"
                           id="quantity"
                           name="quantity"
                           value={formData.quantity}
