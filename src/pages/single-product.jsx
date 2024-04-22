@@ -6,6 +6,7 @@ import Footer from "../components/market-place/footer";
 import Sidebar from "../components/Sidebar";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import StarRating from "../components/single-product/starRating";
 
 function SingleProduct() {
   function FeatureCard({ iconSrc, title, description }) {
@@ -97,11 +98,15 @@ function SingleProduct() {
                 setOrders={setOrders}
                 setCount={setCount}
               />
+              <div></div>
+
+              <StarRating />
             </div>
           </div>
         </div>
       </div>
-      <div className="relative ml-16">
+
+      <div className="relative mt-20 ml-16">
         <div className="relative flex justify-center w-full">
           <div className="container py-8 ">
             <div className="grid w-full grid-cols-1 gap-6 mx-auto md:grid-cols-4">

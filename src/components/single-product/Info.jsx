@@ -84,6 +84,9 @@ const Info = ({
         <p className="w-3/4 mt-10 font-normal select-none md:text-justify nav-btns ml-9 md:ml-0">
           {receivedProductData?.description}
         </p>
+        <p className="w-3/4 mt-10 font-bold select-none md:text-justify nav-btns ml-9 md:ml-0">
+          Rating : ---
+        </p>
 
         <div className="select-none mt-7 ml-9 md:ml-0">
           <div className="flex items-center justify-between gap-5">
