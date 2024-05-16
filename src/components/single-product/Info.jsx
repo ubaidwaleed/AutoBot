@@ -85,7 +85,7 @@ const Info = ({
           {receivedProductData?.description}
         </p>
         <p className="w-3/4 mt-10 font-bold select-none md:text-justify nav-btns ml-9 md:ml-0">
-          Rating : ---
+          Rating : {receivedProductData?.rating}
         </p>
 
         <div className="select-none mt-7 ml-9 md:ml-0">

@@ -100,7 +100,9 @@ function SingleProduct() {
               />
               <div></div>
 
-              <StarRating />
+              <StarRating
+                receivedProductData={receivedProductData} // Pass received data to Info component
+              />
             </div>
           </div>
         </div>
