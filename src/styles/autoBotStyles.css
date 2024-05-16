@@ -1,0 +1,32 @@
+.typing-dots {
+  width: 17px;
+  height: 17px;
+  background-color: #999999;
+  border-radius: 50%;
+  display: flex;
+  margin: 0 5px;
+  animation: loadingFade 1s infinite;
+  animation-delay: 0;
+}
+
+.typing-dots:nth-child(2) {
+  opacity: 0.8;
+  animation-delay: 0.2s;
+}
+
+.typing-dots:nth-child(3) {
+  opacity: 0.4;
+  animation-delay: 0.4s;
+}
+
+@keyframes loadingFade {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+  }
+}
