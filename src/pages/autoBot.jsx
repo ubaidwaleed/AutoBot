@@ -244,6 +244,66 @@ function AutoBot() {
 
   //------------------------------------------for parts/accessories------------------------------------------------//
 
+  // const sendMessageToLocalServerPart = async (history) => {
+  //   setIsTypingPart(true);
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:3000/chatBot/partsAndAccessories/chat",
+  //       { gptarray: history }
+  //     );
+
+  //     let receivedMessage;
+  //     console.log("Parts - ", response);
+  //     if (typeof response.data === "string") {
+  //       // Extract the "assistant" content from the JSON formatted string
+  //       const assistantContentStart =
+  //         response.data.indexOf('"assistant":') + 13; // Position after "assistant":
+  //       const assistantContentEnd = response.data.lastIndexOf('"}'); // Position before the last "}"
+  //       const assistantMessage = response.data
+  //         .slice(assistantContentStart, assistantContentEnd)
+  //         .trim();
+  //       const finalMessage = assistantMessage
+  //         .replace(/^"|"$/g, "")
+  //         .replace(/\\n/g, "\n")
+  //         .replace(/\\"/g, '"'); // Clean up the string
+
+  //       receivedMessage = {
+  //         role: "assistant",
+  //         content: finalMessage,
+  //       };
+  //     } else if (response.data && response.data.flag === 1) {
+  //       receivedMessage = {
+  //         role: "assistant",
+  //         content: response.data.assistant,
+  //       };
+  //     } else if (response.data.flag === 0 && response.data.Questions) {
+  //       const questionsText = response.data.Questions.join(" ");
+  //       receivedMessage = {
+  //         role: "assistant",
+  //         content: questionsText,
+  //       };
+  //     } else {
+  //       receivedMessage = {
+  //         role: "assistant",
+  //         content: response.data.assistant,
+  //       };
+  //     }
+
+  //     setChatHistoryPart((prev) => {
+  //       const updatedHistory = [...prev, receivedMessage];
+  //       console.log(
+  //         "Parts - Updated chat history after receiving response:",
+  //         updatedHistory
+  //       );
+  //       return updatedHistory;
+  //     });
+  //     setIsTypingPart(false);
+  //   } catch (error) {
+  //     console.error("Parts - Error sending message to local server:", error);
+  //     setIsTypingPart(false);
+  //   }
+  // };
+
   const sendMessageToLocalServerPart = async (history) => {
     setIsTypingPart(true);
     try {
@@ -254,40 +314,81 @@ function AutoBot() {
 
       let receivedMessage;
       console.log("Parts - ", response);
+      let content = "";
+
       if (typeof response.data === "string") {
-        // Extract the "assistant" content from the JSON formatted string
+        // Extract and format the "assistant" content from the JSON formatted string
         const assistantContentStart =
-          response.data.indexOf('"assistant":') + 13; // Position after "assistant":
-        const assistantContentEnd = response.data.lastIndexOf('"}'); // Position before the last "}"
+          response.data.indexOf('"assistant":') + 13;
+        const assistantContentEnd = response.data.lastIndexOf('"}');
         const assistantMessage = response.data
           .slice(assistantContentStart, assistantContentEnd)
-          .trim();
-        const finalMessage = assistantMessage
+          .trim()
           .replace(/^"|"$/g, "")
           .replace(/\\n/g, "\n")
-          .replace(/\\"/g, '"'); // Clean up the string
-
-        receivedMessage = {
-          role: "assistant",
-          content: finalMessage,
-        };
+          .replace(/\\"/g, '"');
+        content = assistantMessage;
       } else if (response.data && response.data.flag === 1) {
-        receivedMessage = {
-          role: "assistant",
-          content: response.data.assistant,
-        };
+        content = response.data.assistant;
+
+        // Add the note if available
+        if (response.data.note) {
+          content += "\n\n\n" + response.data.note;
+        } else if (response.data.source) {
+          content += "\n\n\n" + response.data.source;
+        } else if (response.data.additionalInformation) {
+          content += "\n\n\n" + response.data.additionalInformation;
+        } else if (response.data.reminder) {
+          content += "\n\n\n" + response.data.reminder;
+        } else if (response.data.Note) {
+          content += "\n\n\n" + response.data.Note;
+        } else if (response.data.extraInformation) {
+          content += "\n\n\n" + response.data.extraInformation;
+        }
+
+        // Normalize response data keys and dynamically handle different types of product categories
+        const normalizedData = Object.keys(response.data).reduce((acc, key) => {
+          acc[key.toLowerCase()] = response.data[key];
+          return acc;
+        }, {});
+
+        const categories = [
+          "interiorparts",
+          "exteriorparts",
+          "products",
+          "parts",
+          "items",
+          "recommended_parts",
+        ]; // Lowercase for comparison
+        categories.forEach((category) => {
+          if (normalizedData[category] && normalizedData[category].length > 0) {
+            const categoryDetails = normalizedData[category]
+              .map((product, index) => {
+                return `${index + 1}. ${product.Title} - ${
+                  product.Description
+                } Price: ${product.DiscountedPrice} (Original Price: ${
+                  product.OriginalPrice
+                })`;
+              })
+              .join("\n\n\n");
+            content +=
+              `\n\n\n${
+                category[0].toUpperCase() +
+                category.slice(1).replace(/parts$/, " Parts")
+              }: \n\n` + categoryDetails;
+          }
+        });
       } else if (response.data.flag === 0 && response.data.Questions) {
         const questionsText = response.data.Questions.join(" ");
-        receivedMessage = {
-          role: "assistant",
-          content: questionsText,
-        };
+        content = questionsText;
       } else {
-        receivedMessage = {
-          role: "assistant",
-          content: response.data.assistant,
-        };
+        content = response.data.assistant;
       }
+
+      receivedMessage = {
+        role: "assistant",
+        content: content,
+      };
 
       setChatHistoryPart((prev) => {
         const updatedHistory = [...prev, receivedMessage];
