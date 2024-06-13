@@ -7,6 +7,7 @@ import Sidebar from "../components/Sidebar";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import StarRating from "../components/single-product/starRating";
+import { useParams } from "react-router-dom";
 
 function SingleProduct() {
   function FeatureCard({ iconSrc, title, description }) {
@@ -26,6 +27,7 @@ function SingleProduct() {
 
   const [images, setImages] = useState([]);
   const [showImg, setShowImg] = useState();
+  const { id } = useParams();
 
   const location = useLocation();
   useEffect(() => {
@@ -113,22 +115,22 @@ function SingleProduct() {
           <div className="container py-8 ">
             <div className="grid w-full grid-cols-1 gap-6 mx-auto md:grid-cols-4">
               <FeatureCard
-                iconSrc="src/assets/images/icons/delivery-van.svg"
+                iconSrc="../src/assets/images/icons/delivery-van.svg"
                 title="Free Shipping"
                 description="Order over $200"
               />
               <FeatureCard
-                iconSrc="src/assets/images/icons/money-back.svg"
+                iconSrc="../src/assets/images/icons/money-back.svg"
                 title="Money Returns"
                 description="30 days money returns"
               />
               <FeatureCard
-                iconSrc="src/assets/images/icons/phone.svg"
+                iconSrc="../src/assets/images/icons/phone.svg"
                 title="24/7 Support"
                 description="Customer support"
               />
               <FeatureCard
-                iconSrc="src/assets/images/icons/sale.svg"
+                iconSrc="../src/assets/images/icons/sale.svg"
                 title="Hot Offers"
                 description="Discount upto 80%"
               />

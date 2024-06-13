@@ -87,7 +87,20 @@ const Accessories = ({ accessories }) => {
   const navigate = useNavigate();
 
   const handleAccessoryClick = (clickedProduct) => {
-    navigate(`/single-product`, { state: { productData: clickedProduct } });
+    console.log(clickedProduct);
+
+    let id;
+    if (clickedProduct.accessory_id) {
+      id = clickedProduct.accessory_id;
+    } else if (clickedProduct.carcareproduct_id) {
+      id = clickedProduct.carcareproduct_id;
+    } else if (clickedProduct.part_id) {
+      id = clickedProduct.part_id;
+    }
+
+    navigate(`/single-product/${id}`, {
+      state: { productData: clickedProduct },
+    });
   };
 
   return (

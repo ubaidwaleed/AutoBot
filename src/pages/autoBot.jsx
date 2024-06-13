@@ -110,10 +110,10 @@ function AutoBot() {
           "New Cars -Updated chat history after receiving response:",
           updatedHistory
         );
-        localStorage.setItem(
-          `chatHistory-${userEmail}`,
-          JSON.stringify(updatedHistory)
-        ); // Save to localStorage
+        // localStorage.setItem(
+        //   `chatHistory-${userEmail}`,
+        //   JSON.stringify(updatedHistory)
+        // ); // Save to localStorage
 
         return updatedHistory;
       });
@@ -142,10 +142,10 @@ function AutoBot() {
     setChatHistory(newHistory); // Update state with new history
 
     console.log("New Cars - Messages to send:", newHistory); // Log the messages being sent
-    localStorage.setItem(
-      `chatHistory-${userEmail}`,
-      JSON.stringify(newHistory)
-    ); // Save to localStorage
+    // localStorage.setItem(
+    //   `chatHistory-${userEmail}`,
+    //   JSON.stringify(newHistory)
+    // ); // Save to localStorage
 
     setValue(""); // Reset input field
 

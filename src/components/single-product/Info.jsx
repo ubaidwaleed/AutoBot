@@ -75,15 +75,24 @@ const Info = ({
   return (
     <div className="flex justify-center col-span-1">
       <div className="mt-5 md:mt-20">
-        <h3 className="text-sm font-semibold capitalize select-none small-text ml-9 md:ml-0">
+        {/* <h3 className="text-sm font-semibold capitalize select-none small-text ml-9 md:ml-0">
           {receivedProductData?.brand}
-        </h3>
+        </h3> */}
         <h1 className="mt-5 text-3xl font-bold select-none titles md:text-4xl md:w-3/4 ml-9 md:ml-0">
           {receivedProductData?.name}
         </h1>
         <p className="w-3/4 mt-10 font-normal select-none md:text-justify nav-btns ml-9 md:ml-0">
-          {receivedProductData?.description}
+          {receivedProductData?.description
+            ? receivedProductData.description
+                .split(" ")
+                .slice(0, 150)
+                .join(" ") +
+              (receivedProductData.description.split(" ").length > 100
+                ? "..."
+                : "")
+            : ""}
         </p>
+
         <p className="w-3/4 mt-10 font-bold select-none md:text-justify nav-btns ml-9 md:ml-0">
           Rating : {receivedProductData?.rating}
         </p>

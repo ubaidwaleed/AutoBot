@@ -104,7 +104,7 @@ function App() {
           <Route path="/shop-interiorexterior" element={<Page404 />} />
         )}
         {token ? (
-          <Route path="/single-product" element={<SingleProduct />} />
+          <Route path="/single-product/:id" element={<SingleProduct />} />
         ) : (
           <Route path="/single-product" element={<Page404 />} />
         )}
