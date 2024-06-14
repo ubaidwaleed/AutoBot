@@ -56,7 +56,6 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/update-password" element={<UpdatePassword />} />
-
         {token ? (
           <Route path={"/home"} element={<Home token={token} />} />
         ) : (
@@ -103,10 +102,10 @@ function App() {
         ) : (
           <Route path="/shop-interiorexterior" element={<Page404 />} />
         )}
-        {token ? (
+        {/* {token ? (
           <Route path="/single-product/:id" element={<SingleProduct />} />
         ) : (
-          <Route path="/single-product" element={<Page404 />} />
+          <Route path="/single-product/:id" element={<Page404 />} />
         )}
         {token ? (
           <Route path="/cart" element={<Cart />} />
@@ -117,7 +116,15 @@ function App() {
           <Route path="/checkout" element={<Checkout token={token} />} />
         ) : (
           <Route path="/checkout" element={<Page404 />} />
-        )}
+        )} */}
+        <Route path="/single-product/:id" element={<SingleProduct />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout token={token} />} />
+        {token ? (
+          <Route path="/checkout" element={<Checkout token={token} />} />
+        ) : (
+          <Route path="/checkout" element={<Page404 />} />
+        )}{" "}
         {token ? (
           <Route path="/orders" element={<Orders token={token} />} />
         ) : (

@@ -130,8 +130,7 @@ const Sidebar = () => {
   }
 
   const storedToken1 = JSON.parse(sessionStorage.getItem("token"));
-  const isAdmin = storedToken1.user.user_metadata.type === "admin";
-  const isUser = storedToken1.user.user_metadata.type === "user";
+  const isAdmin = storedToken1?.user?.user_metadata?.type === "admin";
 
   const { cartItems, clearCart } = useContext(CartContext);
 
@@ -143,7 +142,7 @@ const Sidebar = () => {
         text="Home"
         onClick={() => navigate("/home")}
       />
-      <SidebarLine />
+      {/* <SidebarLine /> */}
       {/* <SidebarIcon icon={<BsPlus size="28" />} text="Add a new Server" />
       <SidebarIcon
         icon={<BsFillLightningFill size="28" />}
@@ -182,13 +181,11 @@ const Sidebar = () => {
           onClick={() => navigate("/car-care-products")}
         />
       )}
-      {isUser && (
-        <SidebarIcon
-          icon={<FaShopify size="28" />}
-          text="Checkout our marketplace"
-          onClick={() => navigate("/marketplace")}
-        />
-      )}
+      <SidebarIcon
+        icon={<FaShopify size="28" />}
+        text="Checkout our marketplace"
+        onClick={() => navigate("/marketplace")}
+      />
       <div className="flex-grow"></div>
       <div style={{ position: "relative", display: "inline-block" }}>
         {/* Display the cart items count */}
@@ -214,15 +211,14 @@ const Sidebar = () => {
         )}
 
         {/* Render the shopping cart icon */}
-        {isUser && (
-          <SidebarIcon
-            icon={<AiOutlineShoppingCart size="28" />}
-            text="Your shopping cart"
-            onClick={() => navigate("/cart")}
-          />
-        )}
+
+        <SidebarIcon
+          icon={<AiOutlineShoppingCart size="28" />}
+          text="Your shopping cart"
+          onClick={() => navigate("/cart")}
+        />
       </div>
-      <SidebarLine />
+      {/* <SidebarLine /> */}
       <div className="z-50">
         <UserMenu />
       </div>

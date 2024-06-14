@@ -89,14 +89,7 @@ const Parts = () => {
   const handlePartsClick = (clickedProduct) => {
     console.log(clickedProduct);
 
-    let id;
-    if (clickedProduct.accessory_id) {
-      id = clickedProduct.accessory_id;
-    } else if (clickedProduct.carcareproduct_id) {
-      id = clickedProduct.carcareproduct_id;
-    } else if (clickedProduct.part_id) {
-      id = clickedProduct.part_id;
-    }
+    let id = clickedProduct?.id;
 
     navigate(`/single-product/${id}`, {
       state: { productData: clickedProduct },

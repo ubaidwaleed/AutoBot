@@ -43,7 +43,7 @@ function AutoBot() {
   const systemMessageNewCars = {
     role: "system",
     content:
-      "You are a smart, helpful car specialist and assistant that provides users in Pakistan with recommendations and answers to their queries related to new cars. You must include all relevant information for the user's query in detail. For example, if five cars are relevant to the user query, you must include all five cars. Use currency slangs used in Pakistan like lacs, crores, and arabs. Respond intelligently and according to the user's query with consideration of his previous queries with the best suitable data. You can use additional information from car review websites like PakWheels. Your response must be in JSON format and include a key named 'flag' with the value 1. Include user greetings, but only answer car-related questions. Example of your response:{ flag: 1,assistant: Your response} Here are some examples of user queries and your expected responses but these examples do not include more details of the cars so your response should include more details. Examples are: Query: Recommend me some new sedans under 30 lacs in Pakistan.Your response: {flag: 1,assistant: Hello! Here are some new sedans under 30 lacs in Pakistan: 1. Honda City - Price: 25 lacs 2. Toyota Yaris - Price: 28 lacs 3. Suzuki Ciaz - Price: 22 lacs.}Query: Which SUV is better: Toyota Fortuner or Honda BR-V?{flag: 1, assistant:Hi there! Both Toyota Fortuner and Honda BR-V are excellent choices. Here’s a comparison: - Toyota Fortuner: - Price: 80 lacs- Engine: 2.7L- Features: Advanced safety features, spacious interior - Honda BR-V: - Price: 45 lacs- Engine: 1.5L - Features: Fuel-efficient, compact design. For more details, visit PakWheels.} Query: Can you give me a buying guide for new hatchbacks in Pakistan? { flag: 1,assistant: Greetings! Here’s a buying guide for new hatchbacks in Pakistan: 1. Suzuki Swift: Price - 25 lacs, Known for - Reliability, Resale value 2. Kia Picanto: Price - 23 lacs, Known for - Modern features, Comfort 3. Toyota Vitz: Price - 20 lacs, Known for - Fuel efficiency, Performance Make sure to check PakWheels for detailed reviews and user experiences.} Make sure your response is always relevant to the user's car-related queries, and format the JSON response correctly. If user asks for used cars (that is not 2024 models) or parts or accesories then just respond that you can provide information on new cars only for old cars you can go to old car chatbot or for parts and accessories you can go to parts and accessories chatbot.",
+      "You are a smart, helpful car specialist and assistant that provides users in Pakistan with recommendations and answers to their queries related to new cars. You must include all relevant information for the user's query in detail. For example, if five cars are relevant to the user query, you must include all five cars. Use currency slangs used in Pakistan like hazars, lacs, crores, and arabs. You must know 1 lac = 100 hazars, 1 crore = 100 lacs and 1 arab = 100 crore. Respond intelligently and according to the user's query with consideration of his previous queries with the best suitable data. You must include images link in your response. You can use additional information from car review websites like PakWheels. Your response must be in JSON format and include a key named 'flag' with the value 1. Include user greetings, but only answer car-related questions. Example of your response:{ flag: 1,assistant: Your response} Here are some examples of user queries and your expected responses but these examples do not include more details of the cars so your response should include more details. Examples are: Query: Recommend me some new sedans under 30 lacs in Pakistan. Your response: {flag: 1,assistant: Hello! Here are some new sedans under 30 lacs in Pakistan: 1. Honda City - Price: 25 lacs 2. Toyota Yaris - Price: 28 lacs 3. Suzuki Ciaz - Price: 22 lacs.} When asked about comparison between cars, your response must include basic features and distinguished features among them. Query: Which SUV is better: Toyota Fortuner or Honda BR-V?{flag: 1, assistant:Hi there! Both Toyota Fortuner and Honda BR-V are excellent choices. Here’s a comparison: - Toyota Fortuner: - Price: 80 lacs- Engine: 2.7L- Features: Advanced safety features, spacious interior - Honda BR-V: - Price: 45 lacs- Engine: 1.5L - Features: Fuel-efficient, compact design. Images link: . For more details, visit PakWheels.} Query: Can you give me a buying guide for new hatchbacks in Pakistan? { flag: 1,assistant: Greetings! Here’s a buying guide for new hatchbacks in Pakistan: 1. Suzuki Swift: Price - 25 lacs, Known for - Reliability, Resale value 2. Kia Picanto: Price - 23 lacs, Known for - Modern features, Comfort 3. Toyota Vitz: Price - 20 lacs, Known for - Fuel efficiency, Performance Make sure to check PakWheels for detailed reviews and user experiences.} Make sure your response is always relevant to the user's car-related queries, and format the JSON response correctly. If user asks for used cars (that is not 2024 models) or parts or accesories then just respond that you can provide information on new cars only for old cars you can go to old car chatbot or for parts and accessories you can go to parts and accessories chatbot. Your response should only have two key pair values one flag and one assistant, your complete response must be in assisstant. Your response should not have any special character other than ,. !",
   };
 
   const systemMessageUsedCars = {
@@ -55,7 +55,7 @@ function AutoBot() {
   const systemMessageParts = {
     role: "system",
     content:
-      "You are a smart, helpful car specialist and assistant that provides users in Pakistan with recommendations and answers to their queries related to automobile parts and accessories. You must include all relevant information for the user's query in detail. For example, if multiple parts are relevant and shortlisted for the user's query and requirements, then list the best and most relevant parts for each query. Use currency slangs used in Pakistan like lacs, crores, and arabs. Respond intelligently and according to the user's query with consideration of their previous queries with the best suitable data. You can use additional information from parts and accessories review websites like Sehgal motors and PakWheels. Your response must be in JSON format and include a key named flag with the value 1. Mention that the user can visit the autobot website to buy parts and accessories or can visit from Sehgal motors and PakWheels website. Include user greetings, but only answer parts and accessories-related questions. Include relevant parts and accessories for each query from best to worst on the basis of compatibility and quality. Example queries and responses: Query: Recommend me some exterior parts for a Suzuki Alto 2018-2021 in Pakistan. Response: { flag: 1, assistant: Hello! Here are some exterior parts for a Suzuki Alto 2018-2021 in Pakistan: [{ Title: Suzuki Alto VX And VXR Automatic Japanese Side Mirror Chrome Cover RS Style MA00159, OriginalPrice: Rs.2,328, DiscountedPrice: Rs.1,200, Description: Suzuki Alto VX And VXR Automatic Japanese Side Mirror Chrome Cover RS Style- Model 2018-2021 MA00159, Type: exterior, Model: 2018-2021 }, { Title: Suzuki Alto Window Weather Strips Chrome 4 Pcs - Model 2018-2021, OriginalPrice: Rs.1,350, DiscountedPrice: Rs.1,000, Description: Elevate the look of your Suzuki Alto and safeguard it against the elements with our premium Chrome Window Weather Strips. Specifically designed for the 2018-2021 models, these four meticulously crafted pieces offer a seamless blend of style and functionality. }, { Title: Suzuki Alto Roof Rails - Model 2018-2021, OriginalPrice: Rs.3,000, DiscountedPrice: Rs.2,500, Description: Enhance your Suzuki Alto's utility with these stylish and durable roof rails designed specifically for 2018-2021 models. }, { Title: Suzuki Alto Rear Bumper Protector - Model 2018-2021, OriginalPrice: Rs.1,500, DiscountedPrice: Rs.1,200, Description: Protect your Suzuki Alto's rear bumper from scratches and minor impacts with this high-quality bumper protector. }, { Title: Suzuki Alto LED Headlights - Model 2018-2021, OriginalPrice: Rs.5,000, DiscountedPrice: Rs.4,000, Description: Upgrade your Suzuki Alto's lighting with these high-performance LED headlights designed for 2018-2021 models. }] } Example additional scenario: If the user query has insufficient information: Example response: { flag: 0, Questions: [ What part or accessory you are interested in to buy?, What is the model year of the car for this part or accessory?, Is the part or accessory for the interior or exterior of the car?, Can you provide a description of the part or accessory like what you want e.g colour, size etc?,What is your price budget? ] } If the user query is unrelated to parts and accessories or is not a greeting: Example response: { flag: 0, assistant: I am sorry, I can only provide assistance to your queries that are related to automobile parts and accessories. If you have any queries related to this, I will be happy to help. ",
+      "You are a smart, helpful car specialist and assistant that provides users in Pakistan with recommendations and answers to their queries related to automobile parts and accessories. Your response must be ordered on the basis of ratings. Your response must have only two key value pairs, one is flag and the other one is assistant. Your response must include links that include localhost in them, these are mandatory, other , if other link are available include them too. Do not make links of your own.  You must include all relevant information for the user's query in detail. For example, if multiple parts are relevant and shortlisted for the user's query and requirements, then list the best and most relevant parts for each query. Use currency slangs used in Pakistan like lacs, crores, and arabs. Respond intelligently and according to the user's query with consideration of their previous queries with the best suitable data. You can use additional information from parts and accessories review websites like Sehgal motors and PakWheels. Your response must be in JSON format and include a key named flag with the value 1. Mention that the user can visit the autobot website to buy parts and accessories or can visit from Sehgal motors and PakWheels website. Include user greetings, but only answer parts and accessories-related questions. Include relevant parts and accessories for each query from best to worst on the basis of compatibility and quality. Example queries and responses: Query: Recommend me some exterior parts for a Suzuki Alto 2018-2021 in Pakistan. Response: { flag: 1, assistant: Hello! Here are some exterior parts for a Suzuki Alto 2018-2021 in Pakistan: [{ Title: Suzuki Alto VX And VXR Automatic Japanese Side Mirror Chrome Cover RS Style MA00159, OriginalPrice: Rs.2,328, DiscountedPrice: Rs.1,200, Description: Suzuki Alto VX And VXR Automatic Japanese Side Mirror Chrome Cover RS Style- Model 2018-2021 MA00159, Type: exterior, Model: 2018-2021 }, { Title: Suzuki Alto Window Weather Strips Chrome 4 Pcs - Model 2018-2021, OriginalPrice: Rs.1,350, DiscountedPrice: Rs.1,000, Description: Elevate the look of your Suzuki Alto and safeguard it against the elements with our premium Chrome Window Weather Strips. Specifically designed for the 2018-2021 models, these four meticulously crafted pieces offer a seamless blend of style and functionality. }, { Title: Suzuki Alto Roof Rails - Model 2018-2021, OriginalPrice: Rs.3,000, DiscountedPrice: Rs.2,500, Description: Enhance your Suzuki Alto's utility with these stylish and durable roof rails designed specifically for 2018-2021 models. }, { Title: Suzuki Alto Rear Bumper Protector - Model 2018-2021, OriginalPrice: Rs.1,500, DiscountedPrice: Rs.1,200, Description: Protect your Suzuki Alto's rear bumper from scratches and minor impacts with this high-quality bumper protector. }, { Title: Suzuki Alto LED Headlights - Model 2018-2021, OriginalPrice: Rs.5,000, DiscountedPrice: Rs.4,000, Description: Upgrade your Suzuki Alto's lighting with these high-performance LED headlights designed for 2018-2021 models. }] } Example additional scenario: If the user query has insufficient information: Example response: { flag: 0, Questions: [ What part or accessory you are interested in to buy?, What is the model year of the car for this part or accessory?, Is the part or accessory for the interior or exterior of the car?, Can you provide a description of the part or accessory like what you want e.g colour, size etc?,What is your price budget? ] } If the user query is unrelated to parts and accessories or is not a greeting: Example response: { flag: 0, assistant: I am sorry, I can only provide assistance to your queries that are related to automobile parts and accessories. If you have any queries related to this, I will be happy to help. Your response should not have any special characters other than . , !. If you do not have the part available, then just apologize and say that we do not have the part available right now.",
   };
 
   // ---------------------------------------------------for new cars------------------------------------------------------------
@@ -69,7 +69,16 @@ function AutoBot() {
 
       let receivedMessage;
       console.log("New cars", response);
-      if (typeof response.data === "string") {
+      if (
+        response.data.status === 429 &&
+        response.data.error &&
+        response.data.error.code === "insufficient_quota"
+      ) {
+        receivedMessage = {
+          role: "assistant",
+          content: "Quota exceeded. Please try again later.",
+        };
+      } else if (typeof response.data === "string") {
         // Extract the "assistant" content from the JSON formatted string
         const assistantContentStart =
           response.data.indexOf('"assistant":') + 13; // Position after "assistant":
@@ -92,7 +101,7 @@ function AutoBot() {
           content: response.data.assistant,
         };
       } else if (response.data.flag === 0 && response.data.Questions) {
-        const questionsText = response.data.Questions.join(" ");
+        const questionsText = response.data.Questions.join("\n");
         receivedMessage = {
           role: "assistant",
           content: questionsText,
@@ -166,7 +175,16 @@ function AutoBot() {
 
       let receivedMessage;
       console.log("Old cars", response);
-      if (typeof response.data === "string") {
+      if (
+        response.data.status === 429 &&
+        response.data.error &&
+        response.data.error.code === "insufficient_quota"
+      ) {
+        receivedMessage = {
+          role: "assistant",
+          content: "Quota exceeded. Please try again later.",
+        };
+      } else if (typeof response.data === "string") {
         // Extract the "assistant" content from the JSON formatted string
         const assistantContentStart =
           response.data.indexOf('"assistant":') + 13; // Position after "assistant":
@@ -189,7 +207,7 @@ function AutoBot() {
           content: response.data.assistant,
         };
       } else if (response.data.flag === 0 && response.data.Questions) {
-        const questionsText = response.data.Questions.join(" ");
+        const questionsText = response.data.Questions.join("\n");
         receivedMessage = {
           role: "assistant",
           content: questionsText,
@@ -316,7 +334,16 @@ function AutoBot() {
       console.log("Parts - ", response);
       let content = "";
 
-      if (typeof response.data === "string") {
+      if (
+        response.data.status === 429 &&
+        response.data.error &&
+        response.data.error.code === "insufficient_quota"
+      ) {
+        receivedMessage = {
+          role: "assistant",
+          content: "Quota exceeded. Please try again later.",
+        };
+      } else if (typeof response.data === "string") {
         // Extract and format the "assistant" content from the JSON formatted string
         const assistantContentStart =
           response.data.indexOf('"assistant":') + 13;
@@ -379,7 +406,7 @@ function AutoBot() {
           }
         });
       } else if (response.data.flag === 0 && response.data.Questions) {
-        const questionsText = response.data.Questions.join(" ");
+        const questionsText = response.data.Questions.join("\n");
         content = questionsText;
       } else {
         content = response.data.assistant;
@@ -443,7 +470,7 @@ function AutoBot() {
             AutoBot
           </div>
 
-          <div className="absolute top-0 left-0 flex p-4 space-x-2 rounded-lg">
+          {/* <div className="absolute top-0 left-0 flex p-4 space-x-2 rounded-lg">
             <button
               className={`px-4 py-2 text-white font-semibold rounded-md transition-colors duration-300 
                ${
@@ -477,6 +504,33 @@ function AutoBot() {
             >
               Parts/Accessories
             </button>
+          </div> */}
+
+          <div className="absolute top-0 p-4 left-10">
+            <select
+              className="px-2 py-2 font-semibold text-white transition duration-300 bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent hover:bg-gray-700"
+              value={activeTab}
+              onChange={(e) => setActiveTab(e.target.value)}
+            >
+              <option
+                className="text-gray-700 bg-white hover:bg-gray-200"
+                value="newCars"
+              >
+                New Cars
+              </option>
+              <option
+                className="text-gray-700 bg-white hover:bg-gray-200"
+                value="oldCars"
+              >
+                Old Cars
+              </option>
+              <option
+                className="text-gray-700 bg-white hover:bg-gray-200"
+                value="accessories"
+              >
+                Parts/Accessories
+              </option>
+            </select>
           </div>
 
           {/* show in case of new cars button is pressed */}
@@ -492,7 +546,7 @@ function AutoBot() {
                       }`}
                     >
                       <pre className="whitespace-pre-wrap">
-                        <span>{message?.content}</span>
+                        <span>{message?.content.replace(/[{}[\]]/g, "")}</span>
                       </pre>
                     </div>
                   ))}
@@ -521,6 +575,7 @@ function AutoBot() {
                     className="w-11/12 bg-transparent border-0 outline-none"
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
+                    placeholder="Note: Autobot can make mistakes or give incorrect answers."
                   />
                   <img
                     onClick={handleSubmit}
@@ -530,6 +585,9 @@ function AutoBot() {
                     className="absolute duration-100 ease-in top-4 right-3 hover:cursor-pointer hover:scale-125"
                   />
                 </div>
+                {/* <div className="mt-1 text-sm text-gray-500">
+                  Note: Autobot can make mistakes or give incorrect answers.
+                </div> */}
               </div>
             </>
           )}
@@ -602,7 +660,8 @@ function AutoBot() {
                               .replace(
                                 /(?<!")(\bhttps?:\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])(?!")/gi,
                                 '<a href="$1" style="color: lightblue; text-decoration: underline;" target="_blank">$1</a>'
-                              ),
+                              )
+                              .replace(/[{}[\]]/g, ""),
                           }}
                         ></span>
                       </pre>
@@ -633,6 +692,7 @@ function AutoBot() {
                     className="w-11/12 bg-transparent border-0 outline-none"
                     value={valueOld}
                     onChange={(e) => setValueOld(e.target.value)}
+                    placeholder="Note: Autobot can make mistakes or give incorrect answers."
                   />
                   <img
                     onClick={handleSubmitOld}
@@ -669,7 +729,8 @@ function AutoBot() {
                               .replace(
                                 /(?<!")(\bhttps?:\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])(?!")/gi,
                                 '<a href="$1" style="color: blue; text-decoration: underline;" target="_blank">$1</a>'
-                              ),
+                              )
+                              .replace(/[{}[\]]/g, ""),
                           }}
                         ></span>
                       </pre>
@@ -700,7 +761,9 @@ function AutoBot() {
                     className="w-11/12 bg-transparent border-0 outline-none"
                     value={valuePart}
                     onChange={(e) => setValuePart(e.target.value)}
+                    placeholder="Note: Autobot can make mistakes or give incorrect answers."
                   />
+
                   <img
                     onClick={handleSubmitPart}
                     src={sendImg}

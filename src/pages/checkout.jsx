@@ -82,7 +82,7 @@ const Checkout = ({ token }) => {
     sub_total_price: cartSubTotal,
     shipping_price: shippingPrice,
     total_price: cartSubTotal + shippingPrice,
-    user_id: token.user.id,
+    user_id: token?.user?.id,
     payment_method: "COD",
   };
 
